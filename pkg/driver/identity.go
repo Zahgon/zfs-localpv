@@ -18,10 +18,7 @@ package driver
 
 import (
 	"github.com/container-storage-interface/spec/lib/go/csi"
-	"github.com/openebs/zfs-localpv/pkg/version"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // identity is the server implementation
@@ -34,9 +31,8 @@ type identity struct {
 // NewIdentity returns a new instance of CSI
 // IdentityServer
 func NewIdentity(d *CSIDriver) csi.IdentityServer {
-	return &identity{
-		driver: d,
-	}
+	_ = "STUB: not implemented"
+	return *new(csi.IdentityServer)
 }
 
 // GetPluginInfo returns the version and name of
@@ -47,23 +43,13 @@ func (id *identity) GetPluginInfo(
 	ctx context.Context,
 	req *csi.GetPluginInfoRequest,
 ) (*csi.GetPluginInfoResponse, error) {
-
-	if id.driver.config.DriverName == "" {
-		return nil, status.Error(codes.Unavailable, "missing driver name")
-	}
-
-	if id.driver.config.Version == "" {
-		return nil, status.Error(codes.Unavailable, "missing driver version")
-	}
-
-	return &csi.GetPluginInfoResponse{
-		Name: id.driver.config.DriverName,
-		// TODO
-		// verify which version needs to be used:
-		// config.version or version.Current()
-		VendorVersion: version.Current(),
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// TODO
+// verify which version needs to be used:
+// config.version or version.Current()
 
 // TODO
 // Need to implement this
@@ -75,8 +61,8 @@ func (id *identity) Probe(
 	ctx context.Context,
 	req *csi.ProbeRequest,
 ) (*csi.ProbeResponse, error) {
-
-	return &csi.ProbeResponse{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetPluginCapabilities returns supported capabilities
@@ -91,23 +77,6 @@ func (id *identity) GetPluginCapabilities(
 	ctx context.Context,
 	req *csi.GetPluginCapabilitiesRequest,
 ) (*csi.GetPluginCapabilitiesResponse, error) {
-
-	return &csi.GetPluginCapabilitiesResponse{
-		Capabilities: []*csi.PluginCapability{
-			{
-				Type: &csi.PluginCapability_Service_{
-					Service: &csi.PluginCapability_Service{
-						Type: csi.PluginCapability_Service_CONTROLLER_SERVICE,
-					},
-				},
-			},
-			{
-				Type: &csi.PluginCapability_Service_{
-					Service: &csi.PluginCapability_Service{
-						Type: csi.PluginCapability_Service_VOLUME_ACCESSIBILITY_CONSTRAINTS,
-					},
-				},
-			},
-		},
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

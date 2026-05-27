@@ -29,19 +29,20 @@ type DeleteVolumeResponseBuilder struct {
 // NewDeleteVolumeResponseBuilder returns a new
 // instance of DeleteVolumeResponseBuilder
 func NewDeleteVolumeResponseBuilder() *DeleteVolumeResponseBuilder {
-	return &DeleteVolumeResponseBuilder{
-		response: &csi.DeleteVolumeResponse{},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns the constructed instance
 // of csi DeleteVolumeResponse
 func (b *DeleteVolumeResponseBuilder) Build() *csi.DeleteVolumeResponse {
-	return b.response
+	_ = "STUB: not implemented"
+
+	// DeleteSnapshotResponseBuilder helps building an
+	// instance of csi DeleteSnapshotResponse
+	return nil
 }
 
-// DeleteSnapshotResponseBuilder helps building an
-// instance of csi DeleteSnapshotResponse
 type DeleteSnapshotResponseBuilder struct {
 	response *csi.DeleteSnapshotResponse
 }
@@ -49,13 +50,13 @@ type DeleteSnapshotResponseBuilder struct {
 // NewDeleteSnapshotResponseBuilder returns a new
 // instance of DeleteSnapshotResponseBuilder
 func NewDeleteSnapshotResponseBuilder() *DeleteSnapshotResponseBuilder {
-	return &DeleteSnapshotResponseBuilder{
-		response: &csi.DeleteSnapshotResponse{},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns the constructed instance
 // of csi DeleteSnapshotResponse
 func (b *DeleteSnapshotResponseBuilder) Build() *csi.DeleteSnapshotResponse {
-	return b.response
+	_ = "STUB: not implemented"
+	return nil
 }

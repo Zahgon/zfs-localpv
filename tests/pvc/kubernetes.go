@@ -15,14 +15,9 @@
 package pvc
 
 import (
-	"context"
-	"strings"
-
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	client "github.com/openebs/lib-csi/pkg/common/kubernetes/client"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -90,170 +85,79 @@ type KubeclientBuildOption func(*Kubeclient)
 
 // withDefaults sets the default options
 // of kubeclient instance
-func (k *Kubeclient) withDefaults() {
-	if k.getClientset == nil {
-		k.getClientset = func() (clients *kubernetes.Clientset, err error) {
-			return client.New().Clientset()
-		}
-	}
-
-	if k.getClientsetForPath == nil {
-		k.getClientsetForPath = func(kubeConfigPath string) (clients *kubernetes.Clientset, err error) {
-			return client.New(client.WithKubeConfigPath(kubeConfigPath)).Clientset()
-		}
-	}
-
-	if k.get == nil {
-		k.get = func(cli *kubernetes.Clientset, name string, namespace string, opts metav1.GetOptions) (*corev1.PersistentVolumeClaim, error) {
-			return cli.CoreV1().PersistentVolumeClaims(namespace).Get(context.TODO(), name, opts)
-		}
-	}
-
-	if k.list == nil {
-		k.list = func(cli *kubernetes.Clientset, namespace string, opts metav1.ListOptions) (*corev1.PersistentVolumeClaimList, error) {
-			return cli.CoreV1().PersistentVolumeClaims(namespace).List(context.TODO(), opts)
-		}
-	}
-
-	if k.del == nil {
-		k.del = func(cli *kubernetes.Clientset, namespace string, name string, deleteOpts *metav1.DeleteOptions) error {
-			return cli.CoreV1().PersistentVolumeClaims(namespace).Delete(context.TODO(), name, *deleteOpts)
-		}
-	}
-
-	if k.delCollection == nil {
-		k.delCollection = func(cli *kubernetes.Clientset, namespace string, listOpts metav1.ListOptions, deleteOpts *metav1.DeleteOptions) error {
-			return cli.CoreV1().PersistentVolumeClaims(namespace).DeleteCollection(context.TODO(), *deleteOpts, listOpts)
-		}
-	}
-
-	if k.create == nil {
-		k.create = func(cli *kubernetes.Clientset, namespace string, pvc *corev1.PersistentVolumeClaim) (*corev1.PersistentVolumeClaim, error) {
-			return cli.CoreV1().PersistentVolumeClaims(namespace).Create(context.TODO(), pvc, metav1.CreateOptions{})
-		}
-	}
-
-	if k.update == nil {
-		k.update = func(cli *kubernetes.Clientset, namespace string, pvc *corev1.PersistentVolumeClaim) (*corev1.PersistentVolumeClaim, error) {
-			return cli.CoreV1().PersistentVolumeClaims(namespace).Update(context.TODO(), pvc, metav1.UpdateOptions{})
-		}
-	}
-}
+func (k *Kubeclient) withDefaults() { _ = "STUB: not implemented"; return }
 
 // WithClientSet sets the kubernetes client against
 // the kubeclient instance
 func WithClientSet(c *kubernetes.Clientset) KubeclientBuildOption {
-	return func(k *Kubeclient) {
-		k.clientset = c
-	}
+	_ = "STUB: not implemented"
+	return *new(KubeclientBuildOption)
 }
 
 // WithKubeConfigPath sets the kubeConfig path
 // against client instance
 func WithKubeConfigPath(path string) KubeclientBuildOption {
-	return func(k *Kubeclient) {
-		k.kubeConfigPath = path
-	}
+	_ = "STUB: not implemented"
+	return *new(KubeclientBuildOption)
 }
 
 // NewKubeClient returns a new instance of kubeclient meant for
 // pvc operations
 func NewKubeClient(opts ...KubeclientBuildOption) *Kubeclient {
-	k := &Kubeclient{}
-	for _, o := range opts {
-		o(k)
-	}
-	k.withDefaults()
-	return k
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithNamespace sets the kubernetes client against
 // the provided namespace
 func (k *Kubeclient) WithNamespace(namespace string) *Kubeclient {
-	k.namespace = namespace
-	return k
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (k *Kubeclient) getClientsetForPathOrDirect() (*kubernetes.Clientset, error) {
-	if k.kubeConfigPath != "" {
-		return k.getClientsetForPath(k.kubeConfigPath)
-	}
-	return k.getClientset()
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // getClientsetOrCached returns either a new instance
 // of kubernetes client or its cached copy
 func (k *Kubeclient) getClientsetOrCached() (*kubernetes.Clientset, error) {
-	if k.clientset != nil {
-		return k.clientset, nil
-	}
-
-	cs, err := k.getClientsetForPathOrDirect()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get clientset")
-	}
-	k.clientset = cs
-	return k.clientset, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Get returns a pvc resource
 // instances present in kubernetes cluster
 func (k *Kubeclient) Get(name string, opts metav1.GetOptions) (*corev1.PersistentVolumeClaim, error) {
-	if strings.TrimSpace(name) == "" {
-		return nil, errors.New("failed to get pvc: missing pvc name")
-	}
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get pvc {%s}", name)
-	}
-	return k.get(cli, name, k.namespace, opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // List returns a list of pvc
 // instances present in kubernetes cluster
 func (k *Kubeclient) List(opts metav1.ListOptions) (*corev1.PersistentVolumeClaimList, error) {
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to list pvc listoptions: '%v'", opts)
-	}
-	return k.list(cli, k.namespace, opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Delete deletes a pvc instance from the
 // kubecrnetes cluster
 func (k *Kubeclient) Delete(name string, deleteOpts *metav1.DeleteOptions) error {
-	if strings.TrimSpace(name) == "" {
-		return errors.New("failed to delete pvc: missing pvc name")
-	}
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return errors.Wrapf(err, "failed to delete pvc {%s}", name)
-	}
-	return k.del(cli, k.namespace, name, deleteOpts)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Create creates a pvc in specified namespace in kubernetes cluster
 func (k *Kubeclient) Create(pvc *corev1.PersistentVolumeClaim) (*corev1.PersistentVolumeClaim, error) {
-	if pvc == nil {
-		return nil, errors.New("failed to create pvc: nil pvc object")
-	}
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to create pvc {%s} in namespace {%s}", pvc.Name, pvc.Namespace)
-	}
-	return k.create(cli, k.namespace, pvc)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Update updates a pvc in specified namespace in kubernetes cluster
 func (k *Kubeclient) Update(pvc *corev1.PersistentVolumeClaim) (*corev1.PersistentVolumeClaim, error) {
-	if pvc == nil {
-		return nil, errors.New("failed to update pvc: nil pvc object")
-	}
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to update pvc {%s} in namespace {%s}", pvc.Name, pvc.Namespace)
-	}
-	return k.update(cli, k.namespace, pvc)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // CreateCollection creates a list of pvcs
@@ -261,29 +165,12 @@ func (k *Kubeclient) Update(pvc *corev1.PersistentVolumeClaim) (*corev1.Persiste
 func (k *Kubeclient) CreateCollection(
 	list *corev1.PersistentVolumeClaimList,
 ) (*corev1.PersistentVolumeClaimList, error) {
-	if list == nil || len(list.Items) == 0 {
-		return nil, errors.New("failed to create list of pvcs: nil pvc list provided")
-	}
-
-	newlist := &corev1.PersistentVolumeClaimList{}
-	for _, item := range list.Items {
-		item := item
-		obj, err := k.Create(&item)
-		if err != nil {
-			return nil, err
-		}
-
-		newlist.Items = append(newlist.Items, *obj)
-	}
-
-	return newlist, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // DeleteCollection deletes a collection of pvc objects.
 func (k *Kubeclient) DeleteCollection(listOpts metav1.ListOptions, deleteOpts *metav1.DeleteOptions) error {
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return errors.Wrapf(err, "failed to delete the collection of pvcs")
-	}
-	return k.delCollection(cli, k.namespace, listOpts, deleteOpts)
+	_ = "STUB: not implemented"
+	return nil
 }

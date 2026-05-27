@@ -41,33 +41,22 @@ type predicateList []Predicate
 
 // ToAPIList converts StorageClassList to API StorageClassList
 func (scl *StorageClassList) ToAPIList() *storagev1.StorageClassList {
-	sclist := &storagev1.StorageClassList{}
-	for _, sc := range scl.items {
-		sc := sc // Pin it
-		sclist.Items = append(sclist.Items, *sc.object)
-	}
-	return sclist
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Pin it
 
 // all returns true if all the predicateList
 // succeed against the provided StorageClass
 // instance
-func (l predicateList) all(sc *StorageClass) bool {
-	for _, pred := range l {
-		if !pred(sc) {
-			return false
-		}
-	}
-	return true
-}
+func (l predicateList) all(sc *StorageClass) bool { _ = "STUB: not implemented"; return false }
 
 // Len returns the number of items present in the StorageClassList
-func (scl *StorageClassList) Len() int {
-	return len(scl.items)
-}
+func (scl *StorageClassList) Len() int { _ = "STUB: not implemented"; return 0 }
 
 // NewForAPIObject returns a new instance of StorageClass
 func NewForAPIObject(obj *storagev1.StorageClass) *StorageClass {
-	sc := &StorageClass{object: obj}
-	return sc
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -37,147 +37,83 @@ type predicateList []Predicate
 type Predicate func(*Pod) bool
 
 // ToAPIList converts List to API List
-func (pl *List) ToAPIList() *corev1.PodList {
-	plist := &corev1.PodList{}
-	for _, pod := range pl.items {
-		plist.Items = append(plist.Items, *pod.object)
-	}
-	return plist
-}
+func (pl *List) ToAPIList() *corev1.PodList { _ = "STUB: not implemented"; return nil }
 
 type podBuildOption func(*Pod)
 
 // NewForAPIObject returns a new instance of Pod
 func NewForAPIObject(obj *corev1.Pod, opts ...podBuildOption) *Pod {
-	p := &Pod{object: obj}
-	for _, o := range opts {
-		o(p)
-	}
-	return p
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Len returns the number of items present in the List
-func (pl *List) Len() int {
-	return len(pl.items)
-}
+func (pl *List) Len() int { _ = "STUB: not implemented"; return 0 }
 
 // all returns true if all the predicates
 // succeed against the provided pod
 // instance
-func (l predicateList) all(p *Pod) bool {
-	for _, pred := range l {
-		if !pred(p) {
-			return false
-		}
-	}
-	return true
-}
+func (l predicateList) all(p *Pod) bool { _ = "STUB: not implemented"; return false }
 
 // IsRunning returns true if the pod is in running
 // state
-func (p *Pod) IsRunning() bool {
-	return p.object.Status.Phase == "Running"
-}
+func (p *Pod) IsRunning() bool { _ = "STUB: not implemented"; return false }
 
 // IsRunning is a predicate to filter out pods
 // which in running state
-func IsRunning() Predicate {
-	return func(p *Pod) bool {
-		return p.IsRunning()
-	}
-}
+func IsRunning() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // IsCompleted returns true if the pod is in completed
 // state
-func (p *Pod) IsCompleted() bool {
-	return p.object.Status.Phase == "Succeeded"
-}
+func (p *Pod) IsCompleted() bool { _ = "STUB: not implemented"; return false }
 
 // IsCompleted is a predicate to filter out pods
 // which in completed state
-func IsCompleted() Predicate {
-	return func(p *Pod) bool {
-		return p.IsCompleted()
-	}
-}
+func IsCompleted() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // HasLabels returns true if provided labels
 // map[key]value are present in the provided List
 // instance
 func HasLabels(keyValuePair map[string]string) Predicate {
-	return func(p *Pod) bool {
-		//		objKeyValues := p.object.GetLabels()
-		for key, value := range keyValuePair {
-			if !p.HasLabel(key, value) {
-				return false
-			}
-		}
-		return true
-	}
+	_ = "STUB: not implemented"
+	return *new(Predicate)
 }
+
+//		objKeyValues := p.object.GetLabels()
 
 // HasLabel return true if provided lable
 // key and value are present in the the provided List
 // instance
-func (p *Pod) HasLabel(key, value string) bool {
-	val, ok := p.object.GetLabels()[key]
-	if ok {
-		return val == value
-	}
-	return false
-}
+func (p *Pod) HasLabel(key, value string) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabel is predicate to filter out labeled
 // pod instances
-func HasLabel(key, value string) Predicate {
-	return func(p *Pod) bool {
-		return p.HasLabel(key, value)
-	}
-}
+func HasLabel(key, value string) Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // IsNil returns true if the pod instance
 // is nil
-func (p *Pod) IsNil() bool {
-	return p.object == nil
-}
+func (p *Pod) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsNil is predicate to filter out nil pod
 // instances
-func IsNil() Predicate {
-	return func(p *Pod) bool {
-		return p.IsNil()
-	}
-}
+func IsNil() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // GetAPIObject returns a API's Pod
 func (p *Pod) GetAPIObject() *corev1.Pod {
-	return p.object
+	_ = "STUB: not implemented"
+
+	// FromList created a List with provided api List
+	return nil
 }
 
-// FromList created a List with provided api List
-func FromList(pods *corev1.PodList) *List {
-	pl := ListBuilderForAPIList(pods).
-		List()
-	return pl
-}
+func FromList(pods *corev1.PodList) *List { _ = "STUB: not implemented"; return nil }
 
 // GetScheduledNodes returns the nodes on which pods are scheduled
-func (pl *List) GetScheduledNodes() map[string]int {
-	nodeNames := make(map[string]int)
-	for _, p := range pl.items {
-		p := p // pin it
-		nodeNames[p.object.Spec.NodeName]++
-	}
-	return nodeNames
-}
+func (pl *List) GetScheduledNodes() map[string]int { _ = "STUB: not implemented"; return nil }
+
+// pin it
 
 // IsMatchNodeAny checks the List is running on the provided nodes
-func (pl *List) IsMatchNodeAny(nodes map[string]int) bool {
-	for _, p := range pl.items {
-		p := p // pin it
-		if nodes[p.object.Spec.NodeName] == 0 {
-			return false
-		}
-	}
-	return true
-}
+func (pl *List) IsMatchNodeAny(nodes map[string]int) bool { _ = "STUB: not implemented"; return false }
+
+// pin it

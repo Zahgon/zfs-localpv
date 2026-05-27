@@ -44,9 +44,7 @@ type OptionFunc func(*container)
 type Predicate func(*container) (nameOrMsg string, ok bool)
 
 // predicateFailedError returns the provided predicate as an error
-func predicateFailedError(message string) error {
-	return errors.Errorf("predicatefailed: %s", message)
-}
+func predicateFailedError(message string) error { _ = "STUB: not implemented"; return nil }
 
 var (
 	errorvalidationFailed = errors.New("container validation failed")
@@ -55,38 +53,14 @@ var (
 // asContainer transforms this container instance into corresponding kubernetes
 // container type
 func (c *container) asContainer() corev1.Container {
-	return corev1.Container{
-		Name:                     c.Name,
-		Image:                    c.Image,
-		Command:                  c.Command,
-		Args:                     c.Args,
-		WorkingDir:               c.WorkingDir,
-		Ports:                    c.Ports,
-		EnvFrom:                  c.EnvFrom,
-		Env:                      c.Env,
-		Resources:                c.Resources,
-		VolumeMounts:             c.VolumeMounts,
-		VolumeDevices:            c.VolumeDevices,
-		LivenessProbe:            c.LivenessProbe,
-		ReadinessProbe:           c.ReadinessProbe,
-		Lifecycle:                c.Lifecycle,
-		TerminationMessagePath:   c.TerminationMessagePath,
-		TerminationMessagePolicy: c.TerminationMessagePolicy,
-		ImagePullPolicy:          c.ImagePullPolicy,
-		SecurityContext:          c.SecurityContext,
-		Stdin:                    c.Stdin,
-		StdinOnce:                c.StdinOnce,
-		TTY:                      c.TTY,
-	}
+	_ = "STUB: not implemented"
+	return *new(corev1.Container)
 }
 
 // New returns a new kubernetes container
 func New(opts ...OptionFunc) corev1.Container {
-	c := &container{}
-	for _, o := range opts {
-		o(c)
-	}
-	return c.asContainer()
+	_ = "STUB: not implemented"
+	return *new(corev1.Container)
 }
 
 // Builder provides utilities required to build a kubernetes container type
@@ -97,347 +71,101 @@ type Builder struct {
 }
 
 // NewBuilder returns a new instance of builder
-func NewBuilder() *Builder {
-	return &Builder{
-		con: &container{},
-	}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // validate will run checks against container instance
-func (b *Builder) validate() error {
-	for _, c := range b.checks {
-		if m, ok := c(b.con); !ok {
-			b.errors = append(b.errors, predicateFailedError(m))
-		}
-	}
-	if len(b.errors) == 0 {
-		return nil
-	}
-	return errorvalidationFailed
-}
+func (b *Builder) validate() error { _ = "STUB: not implemented"; return nil }
 
 // Build returns the final kubernetes container
 func (b *Builder) Build() (corev1.Container, error) {
-	err := b.validate()
-	if err != nil {
-		return corev1.Container{}, err
-	}
-	return b.con.asContainer(), nil
+	_ = "STUB: not implemented"
+	return *new(corev1.Container), nil
 }
 
 // AddCheck adds the predicate as a condition to be validated against the
 // container instance
-func (b *Builder) AddCheck(p Predicate) *Builder {
-	b.checks = append(b.checks, p)
-	return b
-}
+func (b *Builder) AddCheck(p Predicate) *Builder { _ = "STUB: not implemented"; return nil }
 
 // AddChecks adds the provided predicates as conditions to be validated against
 // the container instance
-func (b *Builder) AddChecks(p []Predicate) *Builder {
-	for _, check := range p {
-		b.AddCheck(check)
-	}
-	return b
-}
+func (b *Builder) AddChecks(p []Predicate) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the name of the container
-func (b *Builder) WithName(name string) *Builder {
-	if len(name) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing name"),
-		)
-		return b
-	}
-	WithName(name)(b.con)
-	return b
-}
+func (b *Builder) WithName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the name of the container
-func WithName(name string) OptionFunc {
-	return func(c *container) {
-		c.Name = name
-	}
-}
+func WithName(name string) OptionFunc { _ = "STUB: not implemented"; return *new(OptionFunc) }
 
 // WithImage sets the image of the container
-func (b *Builder) WithImage(img string) *Builder {
-	if len(img) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing image"),
-		)
-		return b
-	}
-	WithImage(img)(b.con)
-	return b
-}
+func (b *Builder) WithImage(img string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithImage sets the image of the container
-func WithImage(img string) OptionFunc {
-	return func(c *container) {
-		c.Image = img
-	}
-}
+func WithImage(img string) OptionFunc { _ = "STUB: not implemented"; return *new(OptionFunc) }
 
 // WithCommandNew sets the command of the container
-func (b *Builder) WithCommandNew(cmd []string) *Builder {
-	if cmd == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil command"),
-		)
-		return b
-	}
-
-	if len(cmd) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing command"),
-		)
-		return b
-	}
-
-	newcmd := []string{}
-	newcmd = append(newcmd, cmd...)
-
-	b.con.Command = newcmd
-	return b
-}
+func (b *Builder) WithCommandNew(cmd []string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithArgumentsNew sets the command arguments of the container
-func (b *Builder) WithArgumentsNew(args []string) *Builder {
-	if args == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil arguments"),
-		)
-		return b
-	}
-
-	if len(args) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing arguments"),
-		)
-		return b
-	}
-
-	newargs := []string{}
-	newargs = append(newargs, args...)
-
-	b.con.Args = newargs
-	return b
-}
+func (b *Builder) WithArgumentsNew(args []string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithVolumeMountsNew sets the command arguments of the container
 func (b *Builder) WithVolumeMountsNew(volumeMounts []corev1.VolumeMount) *Builder {
-	if volumeMounts == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil volumemounts"),
-		)
-		return b
-	}
-
-	if len(volumeMounts) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing volumemounts"),
-		)
-		return b
-	}
-	newvolumeMounts := []corev1.VolumeMount{}
-	newvolumeMounts = append(newvolumeMounts, volumeMounts...)
-	b.con.VolumeMounts = newvolumeMounts
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithVolumeDevicesNew sets the command arguments of the container
 func (b *Builder) WithVolumeDevicesNew(volumeDevices []corev1.VolumeDevice) *Builder {
-	if volumeDevices == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil volumeDevices"),
-		)
-		return b
-	}
-
-	if len(volumeDevices) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing volumeDevices"),
-		)
-		return b
-	}
-	newvolumeDevices := []corev1.VolumeDevice{}
-	newvolumeDevices = append(newvolumeDevices, volumeDevices...)
-	b.con.VolumeDevices = newvolumeDevices
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithImagePullPolicy sets the image pull policy of the container
 func (b *Builder) WithImagePullPolicy(policy corev1.PullPolicy) *Builder {
-	if len(policy) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New(
-				"failed to build container object: missing imagepullpolicy",
-			),
-		)
-		return b
-	}
-
-	b.con.ImagePullPolicy = policy
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithPrivilegedSecurityContext sets securitycontext of the container
 func (b *Builder) WithPrivilegedSecurityContext(privileged *bool) *Builder {
-	if privileged == nil {
-		b.errors = append(
-			b.errors,
-			errors.New(
-				"failed to build container object: missing securitycontext",
-			),
-		)
-		return b
-	}
-
-	newprivileged := *privileged
-	newsecuritycontext := &corev1.SecurityContext{
-		Privileged: &newprivileged,
-	}
-
-	b.con.SecurityContext = newsecuritycontext
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithResources sets resources of the container
 func (b *Builder) WithResources(
 	resources *corev1.ResourceRequirements,
 ) *Builder {
-	if resources == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing resources"),
-		)
-		return b
-	}
-
-	newresources := *resources
-	b.con.Resources = newresources
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithResourcesByValue sets resources of the container
 func (b *Builder) WithResourcesByValue(resources corev1.ResourceRequirements) *Builder {
-	b.con.Resources = resources
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithPortsNew sets ports of the container
 func (b *Builder) WithPortsNew(ports []corev1.ContainerPort) *Builder {
-	if ports == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil ports"),
-		)
-		return b
-	}
-
-	if len(ports) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing ports"),
-		)
-		return b
-	}
-
-	newports := []corev1.ContainerPort{}
-	newports = append(newports, ports...)
-
-	b.con.Ports = newports
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithEnvsNew sets the envs of the container
-func (b *Builder) WithEnvsNew(envs []corev1.EnvVar) *Builder {
-	if envs == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil envs"),
-		)
-		return b
-	}
-
-	if len(envs) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing envs"),
-		)
-		return b
-	}
-
-	newenvs := []corev1.EnvVar{}
-	newenvs = append(newenvs, envs...)
-
-	b.con.Env = newenvs
-	return b
-}
+func (b *Builder) WithEnvsNew(envs []corev1.EnvVar) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithEnvs sets the envs of the container
-func (b *Builder) WithEnvs(envs []corev1.EnvVar) *Builder {
-	if envs == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil envs"),
-		)
-		return b
-	}
-
-	if len(envs) == 0 {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: missing envs"),
-		)
-		return b
-	}
-
-	if b.con.Env == nil {
-		b.WithEnvsNew(envs)
-		return b
-	}
-
-	b.con.Env = append(b.con.Env, envs...)
-	return b
-}
+func (b *Builder) WithEnvs(envs []corev1.EnvVar) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithLivenessProbe sets the liveness probe of the container
 func (b *Builder) WithLivenessProbe(liveness *corev1.Probe) *Builder {
-	if liveness == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil liveness probe"),
-		)
-		return b
-	}
-
-	b.con.LivenessProbe = liveness
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithLifeCycle sets the life cycle of the container
 func (b *Builder) WithLifeCycle(lc *corev1.Lifecycle) *Builder {
-	if lc == nil {
-		b.errors = append(
-			b.errors,
-			errors.New("failed to build container object: nil lifecycle"),
-		)
-		return b
-	}
-
-	b.con.Lifecycle = lc
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }

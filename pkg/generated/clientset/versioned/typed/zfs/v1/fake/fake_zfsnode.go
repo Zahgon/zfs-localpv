@@ -15,18 +15,6 @@ type fakeZFSNodes struct {
 }
 
 func newFakeZFSNodes(fake *FakeZfsV1, namespace string) zfsv1.ZFSNodeInterface {
-	return &fakeZFSNodes{
-		gentype.NewFakeClientWithList[*v1.ZFSNode, *v1.ZFSNodeList](
-			fake.Fake,
-			namespace,
-			v1.SchemeGroupVersion.WithResource("zfsnodes"),
-			v1.SchemeGroupVersion.WithKind("ZFSNode"),
-			func() *v1.ZFSNode { return &v1.ZFSNode{} },
-			func() *v1.ZFSNodeList { return &v1.ZFSNodeList{} },
-			func(dst, src *v1.ZFSNodeList) { dst.ListMeta = src.ListMeta },
-			func(list *v1.ZFSNodeList) []*v1.ZFSNode { return gentype.ToPointerSlice(list.Items) },
-			func(list *v1.ZFSNodeList, items []*v1.ZFSNode) { list.Items = gentype.FromPointerSlice(items) },
-		),
-		fake,
-	}
+	_ = "STUB: not implemented"
+	return *new(zfsv1.ZFSNodeInterface)
 }

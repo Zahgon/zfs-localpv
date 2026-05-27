@@ -5,8 +5,6 @@ package v1
 import (
 	http "net/http"
 
-	zfsv1 "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
-	scheme "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 
@@ -25,81 +23,54 @@ type ZfsV1Client struct {
 }
 
 func (c *ZfsV1Client) ZFSBackups(namespace string) ZFSBackupInterface {
-	return newZFSBackups(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(ZFSBackupInterface)
 }
 
 func (c *ZfsV1Client) ZFSNodes(namespace string) ZFSNodeInterface {
-	return newZFSNodes(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(ZFSNodeInterface)
 }
 
 func (c *ZfsV1Client) ZFSRestores(namespace string) ZFSRestoreInterface {
-	return newZFSRestores(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(ZFSRestoreInterface)
 }
 
 func (c *ZfsV1Client) ZFSSnapshots(namespace string) ZFSSnapshotInterface {
-	return newZFSSnapshots(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(ZFSSnapshotInterface)
 }
 
 func (c *ZfsV1Client) ZFSVolumes(namespace string) ZFSVolumeInterface {
-	return newZFSVolumes(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(ZFSVolumeInterface)
 }
 
 // NewForConfig creates a new ZfsV1Client for the given config.
 // NewForConfig is equivalent to NewForConfigAndClient(c, httpClient),
 // where httpClient was generated with rest.HTTPClientFor(c).
-func NewForConfig(c *rest.Config) (*ZfsV1Client, error) {
-	config := *c
-	setConfigDefaults(&config)
-	httpClient, err := rest.HTTPClientFor(&config)
-	if err != nil {
-		return nil, err
-	}
-	return NewForConfigAndClient(&config, httpClient)
-}
+func NewForConfig(c *rest.Config) (*ZfsV1Client, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // NewForConfigAndClient creates a new ZfsV1Client for the given config and http client.
 // Note the http client provided takes precedence over the configured transport values.
 func NewForConfigAndClient(c *rest.Config, h *http.Client) (*ZfsV1Client, error) {
-	config := *c
-	setConfigDefaults(&config)
-	client, err := rest.RESTClientForConfigAndClient(&config, h)
-	if err != nil {
-		return nil, err
-	}
-	return &ZfsV1Client{client}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewForConfigOrDie creates a new ZfsV1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *ZfsV1Client {
-	client, err := NewForConfig(c)
-	if err != nil {
-		panic(err)
-	}
-	return client
-}
+func NewForConfigOrDie(c *rest.Config) *ZfsV1Client { _ = "STUB: not implemented"; return nil }
 
 // New creates a new ZfsV1Client for the given RESTClient.
-func New(c rest.Interface) *ZfsV1Client {
-	return &ZfsV1Client{c}
-}
+func New(c rest.Interface) *ZfsV1Client { _ = "STUB: not implemented"; return nil }
 
-func setConfigDefaults(config *rest.Config) {
-	gv := zfsv1.SchemeGroupVersion
-	config.GroupVersion = &gv
-	config.APIPath = "/apis"
-	config.NegotiatedSerializer = rest.CodecFactoryForGeneratedClient(scheme.Scheme, scheme.Codecs).WithoutConversion()
-
-	if config.UserAgent == "" {
-		config.UserAgent = rest.DefaultKubernetesUserAgent()
-	}
-}
+func setConfigDefaults(config *rest.Config) { _ = "STUB: not implemented"; return }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *ZfsV1Client) RESTClient() rest.Interface {
-	if c == nil {
-		return nil
-	}
-	return c.restClient
+	_ = "STUB: not implemented"
+	return *new(rest.Interface)
 }

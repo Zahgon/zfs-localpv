@@ -27,12 +27,14 @@ type zFSNodeLister struct {
 
 // NewZFSNodeLister returns a new ZFSNodeLister.
 func NewZFSNodeLister(indexer cache.Indexer) ZFSNodeLister {
-	return &zFSNodeLister{listers.New[*zfsv1.ZFSNode](indexer, zfsv1.Resource("zfsnode"))}
+	_ = "STUB: not implemented"
+	return *new(ZFSNodeLister)
 }
 
 // ZFSNodes returns an object that can list and get ZFSNodes.
 func (s *zFSNodeLister) ZFSNodes(namespace string) ZFSNodeNamespaceLister {
-	return zFSNodeNamespaceLister{listers.NewNamespaced[*zfsv1.ZFSNode](s.ResourceIndexer, namespace)}
+	_ = "STUB: not implemented"
+	return *new(ZFSNodeNamespaceLister)
 }
 
 // ZFSNodeNamespaceLister helps list and get ZFSNodes.

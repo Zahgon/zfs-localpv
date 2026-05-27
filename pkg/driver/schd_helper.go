@@ -16,14 +16,6 @@ limitations under the License.
 
 package driver
 
-import (
-	"github.com/openebs/zfs-localpv/pkg/builder/volbuilder"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"strconv"
-
-	zfs "github.com/openebs/zfs-localpv/pkg/zfs"
-)
-
 // scheduling algorithm constants
 const (
 	// pick the node where less volumes are provisioned for the given pool
@@ -39,26 +31,12 @@ const (
 // It returns a map which has nodes as key and volumes present
 // on the nodes as corresponding value.
 func getVolumeWeightedMap(pool string) (map[string]int64, error) {
-	nmap := map[string]int64{}
-
-	zvlist, err := volbuilder.NewKubeclient().
-		WithNamespace(zfs.OpenEBSNamespace).
-		List(metav1.ListOptions{})
-
-	if err != nil {
-		return nmap, err
-	}
-
-	// create the map of the volume count
-	// for the given pool
-	for _, zv := range zvlist.Items {
-		if zv.Spec.PoolName == pool {
-			nmap[zv.Spec.OwnerNodeID]++
-		}
-	}
-
-	return nmap, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// create the map of the volume count
+// for the given pool
 
 // getCapacityWeightedMap goes through all the pools on all the nodes
 // and creates the node mapping of the capacity for all the nodes.
@@ -66,38 +44,17 @@ func getVolumeWeightedMap(pool string) (map[string]int64, error) {
 // on the nodes as corresponding value. The scheduler will use this map
 // and picks the node which is less weighted.
 func getCapacityWeightedMap(pool string) (map[string]int64, error) {
-	nmap := map[string]int64{}
-
-	zvlist, err := volbuilder.NewKubeclient().
-		WithNamespace(zfs.OpenEBSNamespace).
-		List(metav1.ListOptions{})
-
-	if err != nil {
-		return nmap, err
-	}
-
-	// create the map of the volume capacity
-	// for the given pool
-	for _, zv := range zvlist.Items {
-		if zv.Spec.PoolName == pool {
-			volsize, err := strconv.ParseInt(zv.Spec.Capacity, 10, 64)
-			if err == nil {
-				nmap[zv.Spec.OwnerNodeID] += volsize
-			}
-		}
-	}
-
-	return nmap, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// create the map of the volume capacity
+// for the given pool
 
 // getNodeMap returns the node mapping for the given scheduling algorithm
 func getNodeMap(schd string, pool string) (map[string]int64, error) {
-	switch schd {
-	case VolumeWeighted:
-		return getVolumeWeightedMap(pool)
-	case CapacityWeighted:
-		return getCapacityWeightedMap(pool)
-	}
-	// return CapacityWeighted(default) if not specified
-	return getCapacityWeightedMap(pool)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// return CapacityWeighted(default) if not specified

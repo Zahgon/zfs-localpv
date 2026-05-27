@@ -15,7 +15,6 @@
 package pts
 
 import (
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	"github.com/openebs/zfs-localpv/tests/container"
 	volume "github.com/openebs/zfs-localpv/tests/k8svolume"
 	corev1 "k8s.io/api/core/v1"
@@ -33,318 +32,112 @@ type Builder struct {
 }
 
 // NewBuilder returns new instance of Builder
-func NewBuilder() *Builder {
-	return &Builder{
-		podtemplatespec: &PodTemplateSpec{
-			Object: &corev1.PodTemplateSpec{},
-		},
-	}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the Name field of podtemplatespec with provided value.
-func (b *Builder) WithName(name string) *Builder {
-	if len(name) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec object: missing name"),
-		)
-		return b
-	}
-	b.podtemplatespec.Object.Name = name
-	return b
-}
+func (b *Builder) WithName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithNamespace sets the Namespace field of PodTemplateSpec with provided value.
-func (b *Builder) WithNamespace(namespace string) *Builder {
-	if len(namespace) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing namespace",
-			),
-		)
-		return b
-	}
-	b.podtemplatespec.Object.Namespace = namespace
-	return b
-}
+func (b *Builder) WithNamespace(namespace string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithAnnotations merges existing annotations if any
 // with the ones that are provided here
 func (b *Builder) WithAnnotations(annotations map[string]string) *Builder {
-	if len(annotations) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build deployment object: missing annotations"),
-		)
-		return b
-	}
-
-	if b.podtemplatespec.Object.Annotations == nil {
-		return b.WithAnnotationsNew(annotations)
-	}
-
-	for key, value := range annotations {
-		b.podtemplatespec.Object.Annotations[key] = value
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithAnnotationsNew resets the annotation field of podtemplatespec
 // with provided arguments
 func (b *Builder) WithAnnotationsNew(annotations map[string]string) *Builder {
-	if len(annotations) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing annotations",
-			),
-		)
-		return b
-	}
-
-	// copy of original map
-	newannotations := map[string]string{}
-	for key, value := range annotations {
-		newannotations[key] = value
-	}
-
-	// override
-	b.podtemplatespec.Object.Annotations = newannotations
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// copy of original map
+
+// override
 
 // WithLabels merges existing labels if any
 // with the ones that are provided here
 func (b *Builder) WithLabels(labels map[string]string) *Builder {
-	if len(labels) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing labels",
-			),
-		)
-		return b
-	}
-
-	if b.podtemplatespec.Object.Labels == nil {
-		return b.WithLabelsNew(labels)
-	}
-
-	for key, value := range labels {
-		b.podtemplatespec.Object.Labels[key] = value
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithLabelsNew resets the labels field of podtemplatespec
 // with provided arguments
 func (b *Builder) WithLabelsNew(labels map[string]string) *Builder {
-	if len(labels) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing labels",
-			),
-		)
-		return b
-	}
-
-	// copy of original map
-	newlbls := map[string]string{}
-	for key, value := range labels {
-		newlbls[key] = value
-	}
-
-	// override
-	b.podtemplatespec.Object.Labels = newlbls
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// copy of original map
+
+// override
 
 // WithNodeSelector merges the nodeselectors if present
 // with the provided arguments
 func (b *Builder) WithNodeSelector(nodeselectors map[string]string) *Builder {
-	if len(nodeselectors) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing nodeselectors",
-			),
-		)
-		return b
-	}
-
-	if b.podtemplatespec.Object.Spec.NodeSelector == nil {
-		return b.WithNodeSelectorNew(nodeselectors)
-	}
-
-	for key, value := range nodeselectors {
-		b.podtemplatespec.Object.Spec.NodeSelector[key] = value
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithNodeSelectorNew resets the nodeselector field of podtemplatespec
 // with provided arguments
 func (b *Builder) WithNodeSelectorNew(nodeselectors map[string]string) *Builder {
-	if len(nodeselectors) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing nodeselectors",
-			),
-		)
-		return b
-	}
-
-	// copy of original map
-	newnodeselectors := map[string]string{}
-	for key, value := range nodeselectors {
-		newnodeselectors[key] = value
-	}
-
-	// override
-	b.podtemplatespec.Object.Spec.NodeSelector = newnodeselectors
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// copy of original map
+
+// override
 
 // WithServiceAccountName sets the ServiceAccountnNme field of podtemplatespec
 func (b *Builder) WithServiceAccountName(serviceAccountnNme string) *Builder {
-	if len(serviceAccountnNme) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing serviceaccountname",
-			),
-		)
-		return b
-	}
-
-	b.podtemplatespec.Object.Spec.ServiceAccountName = serviceAccountnNme
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithAffinity sets the affinity field of podtemplatespec
 func (b *Builder) WithAffinity(affinity *corev1.Affinity) *Builder {
-	if affinity == nil {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing affinity",
-			),
-		)
-		return b
-	}
-
-	// copy of original pointer
-	newaffinitylist := *affinity
-
-	b.podtemplatespec.Object.Spec.Affinity = &newaffinitylist
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// copy of original pointer
 
 // WithTolerations merges the existing tolerations
 // with the provided arguments
 func (b *Builder) WithTolerations(tolerations ...corev1.Toleration) *Builder {
-	if tolerations == nil {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: nil tolerations",
-			),
-		)
-		return b
-	}
-	if len(tolerations) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing tolerations",
-			),
-		)
-		return b
-	}
-
-	if len(b.podtemplatespec.Object.Spec.Tolerations) == 0 {
-		return b.WithTolerationsNew(tolerations...)
-	}
-
-	b.podtemplatespec.Object.Spec.Tolerations = append(
-		b.podtemplatespec.Object.Spec.Tolerations,
-		tolerations...,
-	)
-
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithTolerationsNew sets the tolerations field of podtemplatespec
 func (b *Builder) WithTolerationsNew(tolerations ...corev1.Toleration) *Builder {
-	if tolerations == nil {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: nil tolerations",
-			),
-		)
-		return b
-	}
-	if len(tolerations) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build podtemplatespec object: missing tolerations",
-			),
-		)
-		return b
-	}
-
-	// copy of original slice
-	newtolerations := []corev1.Toleration{}
-	newtolerations = append(newtolerations, tolerations...)
-
-	b.podtemplatespec.Object.Spec.Tolerations = newtolerations
-
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// copy of original slice
 
 // WithContainerBuilders builds the list of containerbuilder
 // provided and merges it to the containers field of the podtemplatespec
 func (b *Builder) WithContainerBuilders(
 	containerBuilderList ...*container.Builder,
 ) *Builder {
-	if containerBuilderList == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec: nil containerbuilder"),
-		)
-		return b
-	}
-	for _, containerBuilder := range containerBuilderList {
-		containerObj, err := containerBuilder.Build()
-		if err != nil {
-			b.errs = append(
-				b.errs,
-				errors.Wrap(
-					err,
-					"failed to build podtemplatespec",
-				),
-			)
-			return b
-		}
-		b.podtemplatespec.Object.Spec.Containers = append(
-			b.podtemplatespec.Object.Spec.Containers,
-			containerObj,
-		)
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithTerminationGracePeriodSeconds adds the terminationGracePeriodSeconds
 func (b *Builder) WithTerminationGracePeriodSeconds(
 	period int64,
 ) *Builder {
-	b.podtemplatespec.Object.Spec.TerminationGracePeriodSeconds = &period
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithVolumeBuilders builds the list of volumebuilders provided
@@ -352,29 +145,8 @@ func (b *Builder) WithTerminationGracePeriodSeconds(
 func (b *Builder) WithVolumeBuilders(
 	volumeBuilderList ...*volume.Builder,
 ) *Builder {
-	if volumeBuilderList == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec: nil volumeBuilderList"),
-		)
-		return b
-	}
-	for _, volumeBuilder := range volumeBuilderList {
-		vol, err := volumeBuilder.Build()
-		if err != nil {
-			b.errs = append(
-				b.errs,
-				errors.Wrap(err, "failed to build podtemplatespec"),
-			)
-			return b
-		}
-		newvol := *vol
-		b.podtemplatespec.Object.Spec.Volumes = append(
-			b.podtemplatespec.Object.Spec.Volumes,
-			newvol,
-		)
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithContainerBuildersNew builds the list of containerbuilder
@@ -382,40 +154,8 @@ func (b *Builder) WithVolumeBuilders(
 func (b *Builder) WithContainerBuildersNew(
 	containerBuilderList ...*container.Builder,
 ) *Builder {
-	if containerBuilderList == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec: nil containerbuilder"),
-		)
-		return b
-	}
-	if len(containerBuilderList) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec: missing containerbuilder"),
-		)
-		return b
-	}
-	containerList := []corev1.Container{}
-	for _, containerBuilder := range containerBuilderList {
-		containerObj, err := containerBuilder.Build()
-		if err != nil {
-			b.errs = append(
-				b.errs,
-				errors.Wrap(
-					err,
-					"failed to build podtemplatespec",
-				),
-			)
-			return b
-		}
-		containerList = append(
-			containerList,
-			containerObj,
-		)
-	}
-	b.podtemplatespec.Object.Spec.Containers = containerList
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithVolumeBuildersNew builds the list of volumebuilders provided
@@ -423,59 +163,11 @@ func (b *Builder) WithContainerBuildersNew(
 func (b *Builder) WithVolumeBuildersNew(
 	volumeBuilderList ...*volume.Builder,
 ) *Builder {
-	if volumeBuilderList == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec: nil volumeBuilderList"),
-		)
-		return b
-	}
-	if len(volumeBuilderList) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build podtemplatespec: missing volumeBuilderList"),
-		)
-		return b
-	}
-	volList := []corev1.Volume{}
-	for _, volumeBuilder := range volumeBuilderList {
-		vol, err := volumeBuilder.Build()
-		if err != nil {
-			b.errs = append(
-				b.errs,
-				errors.Wrap(err, "failed to build podtemplatespec"),
-			)
-			return b
-		}
-		newvol := *vol
-		volList = append(
-			volList,
-			newvol,
-		)
-	}
-	b.podtemplatespec.Object.Spec.Volumes = volList
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns a deployment instance
-func (b *Builder) Build() (*PodTemplateSpec, error) {
-	err := b.validate()
-	if err != nil {
-		return nil, errors.Wrapf(
-			err,
-			"failed to build a podtemplatespec: %s",
-			b.podtemplatespec.Object,
-		)
-	}
-	return b.podtemplatespec, nil
-}
+func (b *Builder) Build() (*PodTemplateSpec, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (b *Builder) validate() error {
-	if len(b.errs) != 0 {
-		return errors.Errorf(
-			"failed to validate: build errors were found: %v",
-			b.errs,
-		)
-	}
-	return nil
-}
+func (b *Builder) validate() error { _ = "STUB: not implemented"; return nil }

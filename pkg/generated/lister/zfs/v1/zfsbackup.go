@@ -27,12 +27,14 @@ type zFSBackupLister struct {
 
 // NewZFSBackupLister returns a new ZFSBackupLister.
 func NewZFSBackupLister(indexer cache.Indexer) ZFSBackupLister {
-	return &zFSBackupLister{listers.New[*zfsv1.ZFSBackup](indexer, zfsv1.Resource("zfsbackup"))}
+	_ = "STUB: not implemented"
+	return *new(ZFSBackupLister)
 }
 
 // ZFSBackups returns an object that can list and get ZFSBackups.
 func (s *zFSBackupLister) ZFSBackups(namespace string) ZFSBackupNamespaceLister {
-	return zFSBackupNamespaceLister{listers.NewNamespaced[*zfsv1.ZFSBackup](s.ResourceIndexer, namespace)}
+	_ = "STUB: not implemented"
+	return *new(ZFSBackupNamespaceLister)
 }
 
 // ZFSBackupNamespaceLister helps list and get ZFSBackups.

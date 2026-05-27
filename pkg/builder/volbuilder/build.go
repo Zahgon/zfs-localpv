@@ -17,7 +17,6 @@ limitations under the License.
 package volbuilder
 
 import (
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	apis "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
 )
 
@@ -31,239 +30,88 @@ type Builder struct {
 }
 
 // NewBuilder returns new instance of Builder
-func NewBuilder() *Builder {
-	return &Builder{
-		volume: &ZFSVolume{
-			Object: &apis.ZFSVolume{},
-		},
-	}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // BuildFrom returns new instance of Builder
 // from the provided api instance
-func BuildFrom(volume *apis.ZFSVolume) *Builder {
-	if volume == nil {
-		b := NewBuilder()
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build volume object: nil volume"),
-		)
-		return b
-	}
-	return &Builder{
-		volume: &ZFSVolume{
-			Object: volume,
-		},
-	}
-}
+func BuildFrom(volume *apis.ZFSVolume) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithNamespace sets the namespace of  ZFSVolume
-func (b *Builder) WithNamespace(namespace string) *Builder {
-	if namespace == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs volume object: missing namespace",
-			),
-		)
-		return b
-	}
-	b.volume.Object.Namespace = namespace
-	return b
-}
+func (b *Builder) WithNamespace(namespace string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the name of ZFSVolume
-func (b *Builder) WithName(name string) *Builder {
-	if name == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs volume object: missing name",
-			),
-		)
-		return b
-	}
-	b.volume.Object.Name = name
-	return b
-}
+func (b *Builder) WithName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithCapacity sets the Capacity of zfs volume by converting string
 // capacity into Quantity
-func (b *Builder) WithCapacity(capacity string) *Builder {
-	if capacity == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs volume object: missing capacity",
-			),
-		)
-		return b
-	}
-	b.volume.Object.Spec.Capacity = capacity
-	return b
-}
+func (b *Builder) WithCapacity(capacity string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithEncryption sets the encryption on ZFSVolume
-func (b *Builder) WithEncryption(encr string) *Builder {
-	b.volume.Object.Spec.Encryption = encr
-	return b
-}
+func (b *Builder) WithEncryption(encr string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithKeyLocation sets the encryption key location on ZFSVolume
-func (b *Builder) WithKeyLocation(kl string) *Builder {
-	b.volume.Object.Spec.KeyLocation = kl
-	return b
-}
+func (b *Builder) WithKeyLocation(kl string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithKeyFormat sets the encryption key format on ZFSVolume
-func (b *Builder) WithKeyFormat(kf string) *Builder {
-	b.volume.Object.Spec.KeyFormat = kf
-	return b
-}
+func (b *Builder) WithKeyFormat(kf string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithCompression sets compression of ZFSVolume
 func (b *Builder) WithCompression(compression string) *Builder {
-	b.volume.Object.Spec.Compression = compression
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithDedup sets dedup property of ZFSVolume
-func (b *Builder) WithDedup(dedup string) *Builder {
-	b.volume.Object.Spec.Dedup = dedup
-	return b
-}
+func (b *Builder) WithDedup(dedup string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithThinProv sets if ZFSVolume needs to be thin provisioned
-func (b *Builder) WithThinProv(thinprov string) *Builder {
-	b.volume.Object.Spec.ThinProvision = thinprov
-	return b
-}
+func (b *Builder) WithThinProv(thinprov string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithOwnerNodeID sets owner nodeid for the ZFSVolume where the volume should be provisioned
-func (b *Builder) WithOwnerNodeID(nodeid string) *Builder {
-	b.volume.Object.Spec.OwnerNodeID = nodeid
-	return b
-}
+func (b *Builder) WithOwnerNodeID(nodeid string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithRecordSize sets the recordsize of ZFSVolume
-func (b *Builder) WithRecordSize(rs string) *Builder {
-	b.volume.Object.Spec.RecordSize = rs
-	return b
-}
+func (b *Builder) WithRecordSize(rs string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithVolBlockSize sets the volblocksize of ZFSVolume
-func (b *Builder) WithVolBlockSize(bs string) *Builder {
-	b.volume.Object.Spec.VolBlockSize = bs
-	return b
-}
+func (b *Builder) WithVolBlockSize(bs string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithAnnotation sets the annotation of ZFSVolume
-func (b *Builder) WithAnnotation() *Builder {
-	if b.volume.Object.Annotations == nil {
-		b.volume.Object.Annotations = make(map[string]string)
-	}
-	b.volume.Object.Annotations[MarkForDeletionAnnotation] = "true"
-	return b
-}
+func (b *Builder) WithAnnotation() *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithVolumeType sets if ZFSVolume needs to be thin provisioned
-func (b *Builder) WithVolumeType(vtype string) *Builder {
-	b.volume.Object.Spec.VolumeType = vtype
-	return b
-}
+func (b *Builder) WithVolumeType(vtype string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithVolumeStatus sets ZFSVolume status
-func (b *Builder) WithVolumeStatus(status string) *Builder {
-	b.volume.Object.Status.State = status
-	return b
-}
+func (b *Builder) WithVolumeStatus(status string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithFsType sets filesystem for the ZFSVolume
-func (b *Builder) WithFsType(fstype string) *Builder {
-	b.volume.Object.Spec.FsType = fstype
-	return b
-}
+func (b *Builder) WithFsType(fstype string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithQuotaType sets quota type for dataset volume
-func (b *Builder) WithQuotaType(quotatype string) *Builder {
-	if quotatype != "" {
-		b.volume.Object.Spec.QuotaType = quotatype
-	} else {
-		b.volume.Object.Spec.QuotaType = "quota"
-	}
-	return b
-}
+func (b *Builder) WithQuotaType(quotatype string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithShared sets where filesystem is shared or not
-func (b *Builder) WithShared(shared string) *Builder {
-	b.volume.Object.Spec.Shared = shared
-	return b
-}
+func (b *Builder) WithShared(shared string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithSnapshot sets Snapshot name for creating clone volume
-func (b *Builder) WithSnapshot(snap string) *Builder {
-	b.volume.Object.Spec.SnapName = snap
-	return b
-}
+func (b *Builder) WithSnapshot(snap string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithPoolName sets Pool name for creating volume
-func (b *Builder) WithPoolName(pool string) *Builder {
-	if pool == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs volume object: missing pool name",
-			),
-		)
-		return b
-	}
-	b.volume.Object.Spec.PoolName = pool
-	return b
-}
+func (b *Builder) WithPoolName(pool string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithNodeName sets NodeID for creating the volume
-func (b *Builder) WithNodeName(name string) *Builder {
-	if name == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs volume object: missing node name",
-			),
-		)
-		return b
-	}
-	b.volume.Object.Spec.OwnerNodeID = name
-	return b
-}
+func (b *Builder) WithNodeName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithLabels merges existing labels if any
 // with the ones that are provided here
 func (b *Builder) WithLabels(labels map[string]string) *Builder {
-	if len(labels) == 0 {
-		return b
-	}
-
-	if b.volume.Object.Labels == nil {
-		b.volume.Object.Labels = map[string]string{}
-	}
-
-	for key, value := range labels {
-		b.volume.Object.Labels[key] = value
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithFinalizer sets Finalizer name creating the volume
-func (b *Builder) WithFinalizer(finalizer []string) *Builder {
-	b.volume.Object.Finalizers = append(b.volume.Object.Finalizers, finalizer...)
-	return b
-}
+func (b *Builder) WithFinalizer(finalizer []string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // Build returns ZFSVolume API object
-func (b *Builder) Build() (*apis.ZFSVolume, error) {
-	if len(b.errs) > 0 {
-		return nil, errors.Errorf("%+v", b.errs)
-	}
-
-	return b.volume.Object, nil
-}
+func (b *Builder) Build() (*apis.ZFSVolume, error) { _ = "STUB: not implemented"; return nil, nil }

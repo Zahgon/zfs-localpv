@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	"github.com/container-storage-interface/spec/lib/go/csi"
-	timestamp "google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // CreateSnapshotResponseBuilder helps building an
@@ -30,53 +29,48 @@ type CreateSnapshotResponseBuilder struct {
 // NewCreateSnapshotResponseBuilder returns a new
 // instance of CreateSnapshotResponseBuilder
 func NewCreateSnapshotResponseBuilder() *CreateSnapshotResponseBuilder {
-	return &CreateSnapshotResponseBuilder{
-		response: &csi.CreateSnapshotResponse{
-			Snapshot: &csi.Snapshot{},
-		},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithSize sets the size against the
 // CreateSnapshotResponse instance
 func (b *CreateSnapshotResponseBuilder) WithSize(size int64) *CreateSnapshotResponseBuilder {
-	b.response.Snapshot.SizeBytes = size
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithSnapshotID sets the snapshotID against the
 // CreateSnapshotResponse instance
 func (b *CreateSnapshotResponseBuilder) WithSnapshotID(snapshotID string) *CreateSnapshotResponseBuilder {
-	b.response.Snapshot.SnapshotId = snapshotID
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithSourceVolumeID sets the sourceVolumeID against the
 // CreateSnapshotResponse instance
 func (b *CreateSnapshotResponseBuilder) WithSourceVolumeID(volumeID string) *CreateSnapshotResponseBuilder {
-	b.response.Snapshot.SourceVolumeId = volumeID
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithCreationTime sets the creationTime against the
 // CreateSnapshotResponse instance
 func (b *CreateSnapshotResponseBuilder) WithCreationTime(tsec, tnsec int64) *CreateSnapshotResponseBuilder {
-	b.response.Snapshot.CreationTime = &timestamp.Timestamp{
-		Seconds: tsec,
-		Nanos:   int32(tnsec),
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithReadyToUse sets the readyToUse feild against the
 // CreateSnapshotResponse instance
 func (b *CreateSnapshotResponseBuilder) WithReadyToUse(readyToUse bool) *CreateSnapshotResponseBuilder {
-	b.response.Snapshot.ReadyToUse = readyToUse
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns the constructed instance
 // of csi CreateSnapshotResponse
 func (b *CreateSnapshotResponseBuilder) Build() *csi.CreateSnapshotResponse {
-	return b.response
+	_ = "STUB: not implemented"
+	return nil
 }

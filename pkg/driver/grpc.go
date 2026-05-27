@@ -17,73 +17,35 @@ limitations under the License.
 package driver
 
 import (
-	"bytes"
-	"fmt"
-	"net"
-	"os"
-	"os/signal"
-	"strings"
 	"sync"
-	"syscall"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-
-	"github.com/kubernetes-csi/csi-lib-utils/protosanitizer"
-	"k8s.io/klog/v2"
 
 	"github.com/container-storage-interface/spec/lib/go/csi"
 )
 
 // parseEndpoint should have a valid prefix(unix/tcp) to return a valid endpoint parts
 func parseEndpoint(ep string) (string, string, error) {
-	if strings.HasPrefix(strings.ToLower(ep), "unix://") || strings.HasPrefix(strings.ToLower(ep), "tcp://") {
-		s := strings.SplitN(ep, "://", 2)
-		if s[1] != "" {
-			return s[0], s[1], nil
-		}
-	}
-	return "", "", fmt.Errorf("invalid endpoint: %v", ep)
+	_ = "STUB: not implemented"
+	return "", "", nil
 }
 
 // filters if the logd are informative or pollutant
 func isInfotrmativeLog(info string) bool {
+	_ = "STUB: not implemented"
 
 	// add the messages that pollute logs to the array
-	var msgsToFilter = [][]byte{
-		[]byte("NodeGetVolumeStats"),
-		[]byte("NodeGetCapabilities"),
-	}
-
-	// checks for message in request
-	for _, msg := range msgsToFilter {
-		if bytes.Contains([]byte(info), msg) {
-			return false
-		}
-	}
-
-	return true
+	return false
 }
+
+// checks for message in request
 
 // logGRPC logs all the grpc related errors, i.e the final errors
 // which are returned to the grpc clients
 func logGRPC(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-
-	log := isInfotrmativeLog(info.FullMethod)
-	if log {
-		klog.Infof("GRPC call: %s requests %s", info.FullMethod, protosanitizer.StripSecrets(req))
-	}
-
-	resp, err := handler(ctx, req)
-
-	if log {
-		if err != nil {
-			klog.Errorf("GRPC error: %v", err)
-		} else {
-			klog.Infof("GRPC response: %s", protosanitizer.StripSecrets(resp))
-		}
-	}
-	return resp, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NonBlockingGRPCServer defines Non blocking GRPC server interfaces
@@ -103,11 +65,8 @@ type NonBlockingGRPCServer interface {
 
 // NewNonBlockingGRPCServer returns a new instance of NonBlockingGRPCServer
 func NewNonBlockingGRPCServer(ep string, ids csi.IdentityServer, cs csi.ControllerServer, ns csi.NodeServer) NonBlockingGRPCServer {
-	return &nonBlockingGRPCServer{
-		endpoint:    ep,
-		idntyServer: ids,
-		ctrlServer:  cs,
-		agentServer: ns}
+	_ = "STUB: not implemented"
+	return *new(NonBlockingGRPCServer)
 }
 
 // NonBlocking server
@@ -124,87 +83,44 @@ type nonBlockingGRPCServer struct {
 
 // Start grpc server for serving CSI endpoints
 func (s *nonBlockingGRPCServer) Start() {
+	_ = "STUB: not implemented"
 	// Also stop the grpc server if SIGINT or SIGTERM is received
 	// TODO: (tech-debt) Setup signal handler more above, several files want to use stopCh and the appropriate function is only allowed to be used once.
 	// Affected files: pkg/driver/agent.go pkg/driver/controller.go pkg/driver/grpc.go
-	stopCh := make(chan os.Signal, 1)
-	signal.Notify(stopCh, syscall.SIGINT, syscall.SIGTERM)
-	s.wg.Add(1)
-	go func() {
-		<-stopCh    // wait for the stop signal
-		s.Stop()    // noone actually stops the grpc server, so have to do here
-		s.wg.Done() // to mark above wg.Add as done
-	}()
-
-	go s.serve(s.endpoint, s.idntyServer, s.ctrlServer, s.agentServer)
+	return
 }
+
+// wait for the stop signal
+// noone actually stops the grpc server, so have to do here
+// to mark above wg.Add as done
 
 // Wait for the service to stop
 func (s *nonBlockingGRPCServer) Wait() {
-	s.wg.Wait()
+	_ = "STUB: not implemented"
+
+	// Stop the service forcefully
+	return
 }
 
-// Stop the service forcefully
-func (s *nonBlockingGRPCServer) Stop() {
-	klog.Info("Shutting down gRPC server gracefully")
-	s.server.GracefulStop()
-}
+func (s *nonBlockingGRPCServer) Stop() { _ = "STUB: not implemented"; return }
 
 // ForceStop the service
-func (s *nonBlockingGRPCServer) ForceStop() {
-	klog.Info("Shutting down gRPC server forcefully")
-	s.server.Stop()
-}
+func (s *nonBlockingGRPCServer) ForceStop() { _ = "STUB: not implemented"; return }
 
 // serve starts serving requests at the provided endpoint based on the type of
 // plugin. In this function all the csi related interfaces are provided by
 // container-storage-interface
 func (s *nonBlockingGRPCServer) serve(endpoint string, ids csi.IdentityServer, cs csi.ControllerServer, ns csi.NodeServer) {
-
-	proto, addr, err := parseEndpoint(endpoint)
-	if err != nil {
-		klog.Fatal(err.Error())
-	}
-
-	// Clear off the addr if it is already present, this is done to remove stale
-	// entries, as this path is shared with the OS and will be the same
-	// everytime the plugin restarts, its possible that the last instance leaves
-	// a stale entry
-	if proto == "unix" {
-		addr = "/" + addr
-		if err := os.Remove(addr); err != nil && !os.IsNotExist(err) {
-			klog.Fatalf("Failed to remove %s, error: %s", addr, err.Error())
-		}
-	}
-
-	listener, err := net.Listen(proto, addr)
-	if err != nil {
-		klog.Fatalf("Failed to listen: %v", err)
-	}
-
-	opts := []grpc.ServerOption{
-		grpc.UnaryInterceptor(logGRPC),
-	}
-	// Create a new grpc server, all the request from csi client to
-	// create/delete/... will hit this server
-	server := grpc.NewServer(opts...)
-	s.server = server
-
-	if ids != nil {
-		csi.RegisterIdentityServer(server, ids)
-	}
-	if cs != nil {
-		csi.RegisterControllerServer(server, cs)
-	}
-	if ns != nil {
-		csi.RegisterNodeServer(server, ns)
-	}
-
-	klog.Infof("Listening for connections on address: %#v", listener.Addr())
-
-	// Start serving requests on the grpc server created
-	err = server.Serve(listener)
-	if err != nil {
-		klog.Fatal(err.Error())
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// Clear off the addr if it is already present, this is done to remove stale
+// entries, as this path is shared with the OS and will be the same
+// everytime the plugin restarts, its possible that the last instance leaves
+// a stale entry
+
+// Create a new grpc server, all the request from csi client to
+// create/delete/... will hit this server
+
+// Start serving requests on the grpc server created

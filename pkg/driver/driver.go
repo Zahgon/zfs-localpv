@@ -19,7 +19,6 @@ package driver
 import (
 	"github.com/container-storage-interface/spec/lib/go/csi"
 	config "github.com/openebs/zfs-localpv/pkg/config"
-	"k8s.io/klog/v2"
 )
 
 // CSIDriver defines a common data structure
@@ -39,58 +38,32 @@ type CSIDriver struct {
 // GetVolumeCapabilityAccessModes fetches the access
 // modes on which the volume can be exposed
 func GetVolumeCapabilityAccessModes() []*csi.VolumeCapability_AccessMode {
-	supported := []csi.VolumeCapability_AccessMode_Mode{
-		csi.VolumeCapability_AccessMode_SINGLE_NODE_WRITER,
-	}
-
-	var vcams []*csi.VolumeCapability_AccessMode
-	for _, vcam := range supported {
-		klog.Infof("enabling volume access mode: %s", vcam.String())
-		vcams = append(vcams, newVolumeCapabilityAccessMode(vcam))
-	}
-	return vcams
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func newVolumeCapabilityAccessMode(mode csi.VolumeCapability_AccessMode_Mode) *csi.VolumeCapability_AccessMode {
-	return &csi.VolumeCapability_AccessMode{Mode: mode}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // New returns a new driver instance
-func New(config *config.Config) *CSIDriver {
-	driver := &CSIDriver{
-		config: config,
-		cap:    GetVolumeCapabilityAccessModes(),
-	}
+func New(config *config.Config) *CSIDriver { _ = "STUB: not implemented"; return nil }
 
-	switch config.PluginType {
-	case "controller":
-		driver.cs = NewController(driver)
+// Start monitor goroutine to monitor the
+// ZfsVolume CR. If there is any event
+// related to the volume like destroy or
+// property change, handle it accordingly.
 
-	case "agent":
-		// Start monitor goroutine to monitor the
-		// ZfsVolume CR. If there is any event
-		// related to the volume like destroy or
-		// property change, handle it accordingly.
-
-		driver.ns = NewNode(driver)
-	}
-
-	// Identity server is common to both node and
-	// controller, it is required to register,
-	// share capabilities and probe the corresponding
-	// driver
-	driver.ids = NewIdentity(driver)
-	return driver
-}
+// Identity server is common to both node and
+// controller, it is required to register,
+// share capabilities and probe the corresponding
+// driver
 
 // Run starts the CSI plugin by communicating
 // over the given endpoint
 func (d *CSIDriver) Run() error {
+	_ = "STUB: not implemented"
 	// Initialize and start listening on grpc server
-	s := NewNonBlockingGRPCServer(d.config.Endpoint, d.ids, d.cs, d.ns)
-
-	s.Start()
-	s.Wait()
-
 	return nil
 }

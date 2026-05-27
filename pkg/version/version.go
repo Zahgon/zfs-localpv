@@ -16,16 +16,6 @@ limitations under the License.
 
 package version
 
-import (
-	"io/ioutil"
-	"os"
-	"os/exec"
-	"path/filepath"
-	"strings"
-
-	"k8s.io/klog/v2"
-)
-
 var (
 	// GitCommit that was compiled; filled in by
 	// the compiler.
@@ -50,71 +40,30 @@ const (
 
 // Current returns current version of csi driver
 func Current() string {
-	return Get()
+	_ = "STUB: not implemented"
+
+	// Get returns current version from global
+	// Version variable. If Version is unset then
+	// from VERSION file at the root of this repo.
+	return ""
 }
 
-// Get returns current version from global
-// Version variable. If Version is unset then
-// from VERSION file at the root of this repo.
-func Get() string {
-	if Version != "" {
-		return Version
-	}
-
-	path := filepath.Join(os.Getenv("GOPATH") + versionFile)
-	vBytes, err := ioutil.ReadFile(filepath.Clean(path))
-	if err != nil {
-		klog.Errorf("failed to get version: %s", err.Error())
-		return ""
-	}
-
-	return strings.TrimSpace(string(vBytes))
-}
+func Get() string { _ = "STUB: not implemented"; return "" }
 
 // GetBuildMeta returns build type from
 // global VersionMeta variable. If VersionMeta
 // is unset then this is fetched from BUILDMETA
 // file at the root of this repo.
-func GetBuildMeta() string {
-	if VersionMeta != "" {
-		return "-" + VersionMeta
-	}
-
-	path := filepath.Join(os.Getenv("GOPATH") + buildMetaFile)
-	vBytes, err := ioutil.ReadFile(filepath.Clean(path))
-	if err != nil {
-		klog.Errorf("failed to get build version: %s", err.Error())
-		return ""
-	}
-
-	return "-" + strings.TrimSpace(string(vBytes))
-}
+func GetBuildMeta() string { _ = "STUB: not implemented"; return "" }
 
 // GetGitCommit returns Git commit SHA-1 from
 // global GitCommit variable. If GitCommit is
 // unset this calls Git directly.
-func GetGitCommit() string {
-	if GitCommit != "" {
-		return GitCommit
-	}
-
-	cmd := exec.Command("git", "rev-parse", "--verify", "HEAD")
-	output, err := cmd.Output()
-	if err != nil {
-		klog.Errorf("failed to get git commit: %s", err.Error())
-		return ""
-	}
-
-	return strings.TrimSpace(string(output))
-}
+func GetGitCommit() string { _ = "STUB: not implemented"; return "" }
 
 // GetVersionDetails return version info from git commit
-func GetVersionDetails() string {
-	return "zfs-" + strings.Join([]string{Get(), GetGitCommit()[0:7]}, "-")
-}
+func GetVersionDetails() string { _ = "STUB: not implemented"; return "" }
 
 // Verbose returns version details with git
 // commit info
-func Verbose() string {
-	return strings.Join([]string{Get(), GetGitCommit()[0:7]}, "-")
-}
+func Verbose() string { _ = "STUB: not implemented"; return "" }

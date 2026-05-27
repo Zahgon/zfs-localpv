@@ -3,9 +3,6 @@
 package externalversions
 
 import (
-	fmt "fmt"
-
-	v1 "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -24,31 +21,22 @@ type genericInformer struct {
 
 // Informer returns the SharedIndexInformer.
 func (f *genericInformer) Informer() cache.SharedIndexInformer {
-	return f.informer
+	_ = "STUB: not implemented"
+
+	// Lister returns the GenericLister.
+	return *new(cache.SharedIndexInformer)
 }
 
-// Lister returns the GenericLister.
 func (f *genericInformer) Lister() cache.GenericLister {
-	return cache.NewGenericLister(f.Informer().GetIndexer(), f.resource)
+	_ = "STUB: not implemented"
+	return *new(cache.GenericLister)
 }
 
 // ForResource gives generic access to a shared informer of the matching type
 // TODO extend this to unknown resources with a client pool
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
-	switch resource {
+	_ = "STUB: not implemented"
+
 	// Group=zfs.openebs.io, Version=v1
-	case v1.SchemeGroupVersion.WithResource("zfsbackups"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Zfs().V1().ZFSBackups().Informer()}, nil
-	case v1.SchemeGroupVersion.WithResource("zfsnodes"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Zfs().V1().ZFSNodes().Informer()}, nil
-	case v1.SchemeGroupVersion.WithResource("zfsrestores"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Zfs().V1().ZFSRestores().Informer()}, nil
-	case v1.SchemeGroupVersion.WithResource("zfssnapshots"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Zfs().V1().ZFSSnapshots().Informer()}, nil
-	case v1.SchemeGroupVersion.WithResource("zfsvolumes"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Zfs().V1().ZFSVolumes().Informer()}, nil
-
-	}
-
-	return nil, fmt.Errorf("no informer found for %v", resource)
+	return *new(GenericInformer), nil
 }

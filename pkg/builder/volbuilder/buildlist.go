@@ -28,45 +28,22 @@ type ListBuilder struct {
 }
 
 // NewListBuilder returns a new instance of ListBuilder
-func NewListBuilder() *ListBuilder {
-	return &ListBuilder{
-		list: &apis.ZFSVolumeList{},
-	}
-}
+func NewListBuilder() *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // ListBuilderFrom returns a new instance of
 // ListBuilder from API list instance
-func ListBuilderFrom(vols apis.ZFSVolumeList) *ListBuilder {
-	b := &ListBuilder{list: &apis.ZFSVolumeList{}}
-	if len(vols.Items) == 0 {
-		return b
-	}
-
-	b.list.Items = append(b.list.Items, vols.Items...)
-	return b
-}
+func ListBuilderFrom(vols apis.ZFSVolumeList) *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // List returns the list of pod
 // instances that was built by this
 // builder
-func (b *ListBuilder) List() *apis.ZFSVolumeList {
-	if b.filters == nil || len(b.filters) == 0 {
-		return b.list
-	}
+func (b *ListBuilder) List() *apis.ZFSVolumeList { _ = "STUB: not implemented"; return nil }
 
-	filtered := &apis.ZFSVolumeList{}
-	for _, vol := range b.list.Items {
-		vol := vol // pin it
-		if b.filters.all(From(&vol)) {
-			filtered.Items = append(filtered.Items, vol)
-		}
-	}
-	return filtered
-}
+// pin it
 
 // WithFilter add filters on which the pod
 // has to be filtered
 func (b *ListBuilder) WithFilter(pred ...Predicate) *ListBuilder {
-	b.filters = append(b.filters, pred...)
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }

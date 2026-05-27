@@ -17,7 +17,6 @@ limitations under the License.
 package k8svolume
 
 import (
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -28,42 +27,14 @@ type Builder struct {
 }
 
 // NewBuilder returns new instance of Builder
-func NewBuilder() *Builder {
-	return &Builder{volume: &Volume{object: &corev1.Volume{}}}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the Name field of Volume with provided value.
-func (b *Builder) WithName(name string) *Builder {
-	if len(name) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Volume object: missing Volume name"),
-		)
-		return b
-	}
-	b.volume.object.Name = name
-	return b
-}
+func (b *Builder) WithName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithHostDirectory sets the VolumeSource field of Volume with provided hostpath
 // as type directory.
-func (b *Builder) WithHostDirectory(path string) *Builder {
-	if len(path) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build volume object: missing volume path"),
-		)
-		return b
-	}
-	volumeSource := corev1.VolumeSource{
-		HostPath: &corev1.HostPathVolumeSource{
-			Path: path,
-		},
-	}
-
-	b.volume.object.VolumeSource = volumeSource
-	return b
-}
+func (b *Builder) WithHostDirectory(path string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithHostPathAndType sets the VolumeSource field of Volume with provided
 // hostpath as directory path and type as directory type
@@ -71,69 +42,18 @@ func (b *Builder) WithHostPathAndType(
 	dirpath string,
 	dirtype *corev1.HostPathType,
 ) *Builder {
-	if dirtype == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build volume object: nil volume type"),
-		)
-		return b
-	}
-	if len(dirpath) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build volume object: missing volume path"),
-		)
-		return b
-	}
-	newdirtype := *dirtype
-	volumeSource := corev1.VolumeSource{
-		HostPath: &corev1.HostPathVolumeSource{
-			Path: dirpath,
-			Type: &newdirtype,
-		},
-	}
-
-	b.volume.object.VolumeSource = volumeSource
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithPVCSource sets the Volume field of Volume with provided pvc
-func (b *Builder) WithPVCSource(pvcName string) *Builder {
-	if len(pvcName) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build volume object: missing pvc name"),
-		)
-		return b
-	}
-	volumeSource := corev1.VolumeSource{
-		PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-			ClaimName: pvcName,
-		},
-	}
-	b.volume.object.VolumeSource = volumeSource
-	return b
-}
+func (b *Builder) WithPVCSource(pvcName string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithEmptyDir sets the EmptyDir field of the Volume with provided dir
 func (b *Builder) WithEmptyDir(dir *corev1.EmptyDirVolumeSource) *Builder {
-	if dir == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build volume object: nil dir"),
-		)
-		return b
-	}
-
-	newdir := *dir
-	b.volume.object.EmptyDir = &newdir
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns the Volume API instance
-func (b *Builder) Build() (*corev1.Volume, error) {
-	if len(b.errs) > 0 {
-		return nil, errors.Errorf("%+v", b.errs)
-	}
-	return b.volume.object, nil
-}
+func (b *Builder) Build() (*corev1.Volume, error) { _ = "STUB: not implemented"; return nil, nil }

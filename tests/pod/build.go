@@ -17,7 +17,6 @@ limitations under the License.
 package pod
 
 import (
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	"github.com/openebs/zfs-localpv/tests/container"
 	volume "github.com/openebs/zfs-localpv/tests/k8svolume"
 	corev1 "k8s.io/api/core/v1"
@@ -36,35 +35,13 @@ type Builder struct {
 }
 
 // NewBuilder returns new instance of Builder
-func NewBuilder() *Builder {
-	return &Builder{pod: &Pod{object: &corev1.Pod{}}}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the Name field of Pod with provided value.
-func (b *Builder) WithName(name string) *Builder {
-	if len(name) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Pod object: missing Pod name"),
-		)
-		return b
-	}
-	b.pod.object.Name = name
-	return b
-}
+func (b *Builder) WithName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithNamespace sets the Namespace field of Pod with provided value.
-func (b *Builder) WithNamespace(namespace string) *Builder {
-	if len(namespace) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Pod object: missing namespace"),
-		)
-		return b
-	}
-	b.pod.object.Namespace = namespace
-	return b
-}
+func (b *Builder) WithNamespace(namespace string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithContainerBuilder adds a container to this pod object.
 //
@@ -76,111 +53,54 @@ func (b *Builder) WithNamespace(namespace string) *Builder {
 func (b *Builder) WithContainerBuilder(
 	containerBuilder *container.Builder,
 ) *Builder {
-	containerObj, err := containerBuilder.Build()
-	if err != nil {
-		b.errs = append(b.errs, errors.Wrap(err, "failed to build pod"))
-		return b
-	}
-	b.pod.object.Spec.Containers = append(
-		b.pod.object.Spec.Containers,
-		containerObj,
-	)
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithVolumeBuilder sets Volumes field of deployment.
 func (b *Builder) WithVolumeBuilder(volumeBuilder *volume.Builder) *Builder {
-	vol, err := volumeBuilder.Build()
-	if err != nil {
-		b.errs = append(b.errs, errors.Wrap(err, "failed to build deployment"))
-		return b
-	}
-	b.pod.object.Spec.Volumes = append(
-		b.pod.object.Spec.Volumes,
-		*vol,
-	)
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithRestartPolicy sets the RestartPolicy field in Pod with provided arguments
 func (b *Builder) WithRestartPolicy(
 	restartPolicy corev1.RestartPolicy,
 ) *Builder {
-	b.pod.object.Spec.RestartPolicy = restartPolicy
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithNodeName sets the NodeName field of Pod with provided value.
-func (b *Builder) WithNodeName(nodeName string) *Builder {
-	if len(nodeName) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Pod object: missing Pod node name"),
-		)
-		return b
-	}
-	b.pod.object.Spec.NodeName = nodeName
-	return b
-}
+func (b *Builder) WithNodeName(nodeName string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithNodeSelectorHostnameNew sets the Pod NodeSelector to the provided hostname value
 // This function replaces (resets) the NodeSelector to use only hostname selector
 func (b *Builder) WithNodeSelectorHostnameNew(hostname string) *Builder {
-	if len(hostname) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Pod object: missing Pod hostname"),
-		)
-		return b
-	}
-
-	b.pod.object.Spec.NodeSelector = map[string]string{
-		k8sNodeLabelKeyHostname: hostname,
-	}
-
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithContainers sets the Containers field in Pod with provided arguments
 func (b *Builder) WithContainers(containers []corev1.Container) *Builder {
-	if len(containers) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Pod object: missing containers"),
-		)
-		return b
-	}
-	b.pod.object.Spec.Containers = containers
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithContainer sets the Containers field in Pod with provided arguments
 func (b *Builder) WithContainer(container corev1.Container) *Builder {
-	return b.WithContainers([]corev1.Container{container})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithVolumes sets the Volumes field in Pod with provided arguments
 func (b *Builder) WithVolumes(volumes []corev1.Volume) *Builder {
-	if len(volumes) == 0 {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build Pod object: missing volumes"),
-		)
-		return b
-	}
-	b.pod.object.Spec.Volumes = volumes
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithVolume sets the Volumes field in Pod with provided arguments
-func (b *Builder) WithVolume(volume corev1.Volume) *Builder {
-	return b.WithVolumes([]corev1.Volume{volume})
-}
+func (b *Builder) WithVolume(volume corev1.Volume) *Builder { _ = "STUB: not implemented"; return nil }
 
 // Build returns the Pod API instance
-func (b *Builder) Build() (*corev1.Pod, error) {
-	if len(b.errs) > 0 {
-		return nil, errors.Errorf("%+v", b.errs)
-	}
-	return b.pod.object, nil
-}
+func (b *Builder) Build() (*corev1.Pod, error) { _ = "STUB: not implemented"; return nil, nil }

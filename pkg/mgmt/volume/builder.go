@@ -18,17 +18,12 @@ package volume
 
 import (
 	clientset "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned"
-	openebsScheme "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned/scheme"
 	informers "github.com/openebs/zfs-localpv/pkg/generated/informer/externalversions"
 	listers "github.com/openebs/zfs-localpv/pkg/generated/lister/zfs/v1"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/kubernetes/scheme"
-	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
-	"k8s.io/klog/v2"
 )
 
 const controllerAgentName = "zfsvolume-controller"
@@ -64,72 +59,54 @@ type ZVControllerBuilder struct {
 }
 
 // NewZVControllerBuilder returns an empty instance of controller builder.
-func NewZVControllerBuilder() *ZVControllerBuilder {
-	return &ZVControllerBuilder{
-		ZVController: &ZVController{},
-	}
-}
+func NewZVControllerBuilder() *ZVControllerBuilder { _ = "STUB: not implemented"; return nil }
 
 // withKubeClient fills kube client to controller object.
 func (cb *ZVControllerBuilder) withKubeClient(ks kubernetes.Interface) *ZVControllerBuilder {
-	cb.ZVController.kubeclientset = ks
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withOpenEBSClient fills openebs client to controller object.
 func (cb *ZVControllerBuilder) withOpenEBSClient(cs clientset.Interface) *ZVControllerBuilder {
-	cb.ZVController.clientset = cs
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withZVLister fills zv lister to controller object.
 func (cb *ZVControllerBuilder) withZVLister(sl informers.SharedInformerFactory) *ZVControllerBuilder {
-	zvInformer := sl.Zfs().V1().ZFSVolumes()
-	cb.ZVController.zvLister = zvInformer.Lister()
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withZVSynced adds object sync information in cache to controller object.
 func (cb *ZVControllerBuilder) withZVSynced(sl informers.SharedInformerFactory) *ZVControllerBuilder {
-	zvInformer := sl.Zfs().V1().ZFSVolumes()
-	cb.ZVController.zvSynced = zvInformer.Informer().HasSynced
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withWorkqueue adds workqueue to controller object.
 func (cb *ZVControllerBuilder) withWorkqueueRateLimiting() *ZVControllerBuilder {
-	cb.ZVController.workqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "ZV")
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withRecorder adds recorder to controller object.
 func (cb *ZVControllerBuilder) withRecorder(ks kubernetes.Interface) *ZVControllerBuilder {
-	klog.Infof("Creating event broadcaster")
-	eventBroadcaster := record.NewBroadcaster()
-	eventBroadcaster.StartLogging(klog.Infof)
-	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: ks.CoreV1().Events("")})
-	recorder := eventBroadcaster.NewRecorder(scheme.Scheme, corev1.EventSource{Component: controllerAgentName})
-	cb.ZVController.recorder = recorder
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withEventHandler adds event handlers controller object.
 func (cb *ZVControllerBuilder) withEventHandler(cvcInformerFactory informers.SharedInformerFactory) *ZVControllerBuilder {
-	cvcInformer := cvcInformerFactory.Zfs().V1().ZFSVolumes()
-	// Set up an event handler for when ZV resources change
-	cvcInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
-		AddFunc:    cb.ZVController.addZV,
-		UpdateFunc: cb.ZVController.updateZV,
-		DeleteFunc: cb.ZVController.deleteZV,
-	})
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Set up an event handler for when ZV resources change
 
 // Build returns a controller instance.
 func (cb *ZVControllerBuilder) Build() (*ZVController, error) {
-	err := openebsScheme.AddToScheme(scheme.Scheme)
-	if err != nil {
-		return nil, err
-	}
-	return cb.ZVController, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -27,11 +27,7 @@ type ZFSSnapshot struct {
 
 // From returns a new instance of
 // zfssnap volume
-func From(snap *apis.ZFSSnapshot) *ZFSSnapshot {
-	return &ZFSSnapshot{
-		Object: snap,
-	}
-}
+func From(snap *apis.ZFSSnapshot) *ZFSSnapshot { _ = "STUB: not implemented"; return nil }
 
 // Predicate defines an abstraction
 // to determine conditional checks
@@ -50,68 +46,35 @@ type ZFSSnapshotList struct {
 
 // Len returns the number of items present
 // in the ZFSSnapshotList
-func (snapList *ZFSSnapshotList) Len() int {
-	return len(snapList.List.Items)
-}
+func (snapList *ZFSSnapshotList) Len() int { _ = "STUB: not implemented"; return 0 }
 
 // all returns true if all the predicates
 // succeed against the provided ZFSSnapshot
 // instance
-func (l predicateList) all(snap *ZFSSnapshot) bool {
-	for _, pred := range l {
-		if !pred(snap) {
-			return false
-		}
-	}
-	return true
-}
+func (l predicateList) all(snap *ZFSSnapshot) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabels returns true if provided labels
 // are present in the provided ZFSSnapshot instance
 func HasLabels(keyValuePair map[string]string) Predicate {
-	return func(snap *ZFSSnapshot) bool {
-		for key, value := range keyValuePair {
-			if !snap.HasLabel(key, value) {
-				return false
-			}
-		}
-		return true
-	}
+	_ = "STUB: not implemented"
+	return *new(Predicate)
 }
 
 // HasLabel returns true if provided label
 // is present in the provided ZFSSnapshot instance
-func (snap *ZFSSnapshot) HasLabel(key, value string) bool {
-	val, ok := snap.Object.GetLabels()[key]
-	if ok {
-		return val == value
-	}
-	return false
-}
+func (snap *ZFSSnapshot) HasLabel(key, value string) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabel returns true if provided label
 // is present in the provided ZFSSnapshot instance
-func HasLabel(key, value string) Predicate {
-	return func(snap *ZFSSnapshot) bool {
-		return snap.HasLabel(key, value)
-	}
-}
+func HasLabel(key, value string) Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // IsNil returns true if the zfssnap volume instance
 // is nil
-func (snap *ZFSSnapshot) IsNil() bool {
-	return snap.Object == nil
-}
+func (snap *ZFSSnapshot) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsNil is predicate to filter out nil zfssnap volume
 // instances
-func IsNil() Predicate {
-	return func(snap *ZFSSnapshot) bool {
-		return snap.IsNil()
-	}
-}
+func IsNil() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // GetAPIObject returns zfssnap volume's API instance
-func (snap *ZFSSnapshot) GetAPIObject() *apis.ZFSSnapshot {
-	return snap.Object
-}
+func (snap *ZFSSnapshot) GetAPIObject() *apis.ZFSSnapshot { _ = "STUB: not implemented"; return nil }

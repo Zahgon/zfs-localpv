@@ -15,18 +15,6 @@ type fakeZFSSnapshots struct {
 }
 
 func newFakeZFSSnapshots(fake *FakeZfsV1, namespace string) zfsv1.ZFSSnapshotInterface {
-	return &fakeZFSSnapshots{
-		gentype.NewFakeClientWithList[*v1.ZFSSnapshot, *v1.ZFSSnapshotList](
-			fake.Fake,
-			namespace,
-			v1.SchemeGroupVersion.WithResource("zfssnapshots"),
-			v1.SchemeGroupVersion.WithKind("ZFSSnapshot"),
-			func() *v1.ZFSSnapshot { return &v1.ZFSSnapshot{} },
-			func() *v1.ZFSSnapshotList { return &v1.ZFSSnapshotList{} },
-			func(dst, src *v1.ZFSSnapshotList) { dst.ListMeta = src.ListMeta },
-			func(list *v1.ZFSSnapshotList) []*v1.ZFSSnapshot { return gentype.ToPointerSlice(list.Items) },
-			func(list *v1.ZFSSnapshotList, items []*v1.ZFSSnapshot) { list.Items = gentype.FromPointerSlice(items) },
-		),
-		fake,
-	}
+	_ = "STUB: not implemented"
+	return *new(zfsv1.ZFSSnapshotInterface)
 }

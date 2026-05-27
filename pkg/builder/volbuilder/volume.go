@@ -27,11 +27,7 @@ type ZFSVolume struct {
 
 // From returns a new instance of
 // zfs volume
-func From(vol *apis.ZFSVolume) *ZFSVolume {
-	return &ZFSVolume{
-		Object: vol,
-	}
-}
+func From(vol *apis.ZFSVolume) *ZFSVolume { _ = "STUB: not implemented"; return nil }
 
 // Predicate defines an abstraction
 // to determine conditional checks
@@ -50,68 +46,35 @@ type ZFSVolumeList struct {
 
 // Len returns the number of items present
 // in the ZFSVolumeList
-func (volList *ZFSVolumeList) Len() int {
-	return len(volList.List.Items)
-}
+func (volList *ZFSVolumeList) Len() int { _ = "STUB: not implemented"; return 0 }
 
 // all returns true if all the predicates
 // succeed against the provided ZFSVolume
 // instance
-func (l predicateList) all(vol *ZFSVolume) bool {
-	for _, pred := range l {
-		if !pred(vol) {
-			return false
-		}
-	}
-	return true
-}
+func (l predicateList) all(vol *ZFSVolume) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabels returns true if provided labels
 // are present in the provided ZFSVolume instance
 func HasLabels(keyValuePair map[string]string) Predicate {
-	return func(vol *ZFSVolume) bool {
-		for key, value := range keyValuePair {
-			if !vol.HasLabel(key, value) {
-				return false
-			}
-		}
-		return true
-	}
+	_ = "STUB: not implemented"
+	return *new(Predicate)
 }
 
 // HasLabel returns true if provided label
 // is present in the provided ZFSVolume instance
-func (vol *ZFSVolume) HasLabel(key, value string) bool {
-	val, ok := vol.Object.GetLabels()[key]
-	if ok {
-		return val == value
-	}
-	return false
-}
+func (vol *ZFSVolume) HasLabel(key, value string) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabel returns true if provided label
 // is present in the provided ZFSVolume instance
-func HasLabel(key, value string) Predicate {
-	return func(vol *ZFSVolume) bool {
-		return vol.HasLabel(key, value)
-	}
-}
+func HasLabel(key, value string) Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // IsNil returns true if the zfs volume instance
 // is nil
-func (vol *ZFSVolume) IsNil() bool {
-	return vol.Object == nil
-}
+func (vol *ZFSVolume) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsNil is predicate to filter out nil zfs volume
 // instances
-func IsNil() Predicate {
-	return func(vol *ZFSVolume) bool {
-		return vol.IsNil()
-	}
-}
+func IsNil() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // GetAPIObject returns zfs volume's API instance
-func (vol *ZFSVolume) GetAPIObject() *apis.ZFSVolume {
-	return vol.Object
-}
+func (vol *ZFSVolume) GetAPIObject() *apis.ZFSVolume { _ = "STUB: not implemented"; return nil }

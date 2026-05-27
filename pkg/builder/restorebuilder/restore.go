@@ -27,11 +27,7 @@ type ZFSRestore struct {
 
 // From returns a new instance of
 // zfsrstr rstrume
-func From(rstr *apis.ZFSRestore) *ZFSRestore {
-	return &ZFSRestore{
-		Object: rstr,
-	}
-}
+func From(rstr *apis.ZFSRestore) *ZFSRestore { _ = "STUB: not implemented"; return nil }
 
 // Predicate defines an abstraction
 // to determine conditional checks
@@ -50,68 +46,35 @@ type ZFSRestoreList struct {
 
 // Len returns the number of items present
 // in the ZFSRestoreList
-func (rstrList *ZFSRestoreList) Len() int {
-	return len(rstrList.List.Items)
-}
+func (rstrList *ZFSRestoreList) Len() int { _ = "STUB: not implemented"; return 0 }
 
 // all returns true if all the predicates
 // succeed against the provided ZFSRestore
 // instance
-func (l predicateList) all(rstr *ZFSRestore) bool {
-	for _, pred := range l {
-		if !pred(rstr) {
-			return false
-		}
-	}
-	return true
-}
+func (l predicateList) all(rstr *ZFSRestore) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabels returns true if provided labels
 // are present in the provided ZFSRestore instance
 func HasLabels(keyValuePair map[string]string) Predicate {
-	return func(rstr *ZFSRestore) bool {
-		for key, value := range keyValuePair {
-			if !rstr.HasLabel(key, value) {
-				return false
-			}
-		}
-		return true
-	}
+	_ = "STUB: not implemented"
+	return *new(Predicate)
 }
 
 // HasLabel returns true if provided label
 // is present in the provided ZFSRestore instance
-func (rstr *ZFSRestore) HasLabel(key, value string) bool {
-	val, ok := rstr.Object.GetLabels()[key]
-	if ok {
-		return val == value
-	}
-	return false
-}
+func (rstr *ZFSRestore) HasLabel(key, value string) bool { _ = "STUB: not implemented"; return false }
 
 // HasLabel returns true if provided label
 // is present in the provided ZFSRestore instance
-func HasLabel(key, value string) Predicate {
-	return func(rstr *ZFSRestore) bool {
-		return rstr.HasLabel(key, value)
-	}
-}
+func HasLabel(key, value string) Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // IsNil returns true if the zfsrstr rstrume instance
 // is nil
-func (rstr *ZFSRestore) IsNil() bool {
-	return rstr.Object == nil
-}
+func (rstr *ZFSRestore) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsNil is predicate to filter out nil zfsrstr rstrume
 // instances
-func IsNil() Predicate {
-	return func(rstr *ZFSRestore) bool {
-		return rstr.IsNil()
-	}
-}
+func IsNil() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // GetAPIObject returns zfsrstr rstrume's API instance
-func (rstr *ZFSRestore) GetAPIObject() *apis.ZFSRestore {
-	return rstr.Object
-}
+func (rstr *ZFSRestore) GetAPIObject() *apis.ZFSRestore { _ = "STUB: not implemented"; return nil }

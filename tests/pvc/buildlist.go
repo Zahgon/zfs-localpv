@@ -17,7 +17,6 @@ limitations under the License.
 package pvc
 
 import (
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -38,128 +37,49 @@ type ListBuilder struct {
 }
 
 // NewListBuilder returns an instance of ListBuilder
-func NewListBuilder() *ListBuilder {
-	return &ListBuilder{list: &List{}}
-}
+func NewListBuilder() *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // ListBuilderFromTemplate returns a new instance of
 // ListBuilder based on the provided pvc template
 func ListBuilderFromTemplate(pvc *corev1.PersistentVolumeClaim) *ListBuilder {
-	b := NewListBuilder()
-	if pvc == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build pvc list: nil pvc template"),
-		)
-		return b
-	}
-
-	b.template = pvc
-	b.count = 1
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ListBuilderForAPIObjects returns a new instance of
 // ListBuilder based on provided api pvc list
 func ListBuilderForAPIObjects(pvcs *corev1.PersistentVolumeClaimList) *ListBuilder {
-	b := &ListBuilder{list: &List{}}
-
-	if pvcs == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build pvc list: missing api list"),
-		)
-		return b
-	}
-
-	for _, pvc := range pvcs.Items {
-		pvc := pvc
-		b.list.items = append(b.list.items, &PVC{object: &pvc})
-	}
-
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ListBuilderForObjects returns a new instance of
 // ListBuilder based on provided pvc list
-func ListBuilderForObjects(pvcs *List) *ListBuilder {
-	b := &ListBuilder{}
-	if pvcs == nil {
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build pvc list: missing object list"),
-		)
-		return b
-	}
-
-	b.list = pvcs
-	return b
-}
+func ListBuilderForObjects(pvcs *List) *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // WithFilter adds filters on which the pvcs
 // are filtered
 func (b *ListBuilder) WithFilter(pred ...Predicate) *ListBuilder {
-	b.filters = append(b.filters, pred...)
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithCount sets the count that determines
 // the number of pvcs to be built
-func (b *ListBuilder) WithCount(count int) *ListBuilder {
-	b.count = count
-	return b
-}
+func (b *ListBuilder) WithCount(count int) *ListBuilder { _ = "STUB: not implemented"; return nil }
 
-func (b *ListBuilder) buildFromTemplateIfNilList() {
-	if len(b.list.items) != 0 || b.template == nil {
-		return
-	}
-
-	for i := 0; i < b.count; i++ {
-		b.list.items = append(b.list.items, &PVC{object: b.template})
-	}
-}
+func (b *ListBuilder) buildFromTemplateIfNilList() { _ = "STUB: not implemented"; return }
 
 // List returns the list of pvc instances
 // that was built by this builder
-func (b *ListBuilder) List() (*List, error) {
-	if len(b.errs) > 0 {
-		return nil, errors.Errorf("failed to build pvc list: %+v", b.errs)
-	}
-
-	b.buildFromTemplateIfNilList()
-
-	if b.filters == nil || len(b.filters) == 0 {
-		return b.list, nil
-	}
-
-	filteredList := &List{}
-	for _, pvc := range b.list.items {
-		if b.filters.all(pvc) {
-			filteredList.items = append(filteredList.items, pvc)
-		}
-	}
-
-	return filteredList, nil
-}
+func (b *ListBuilder) List() (*List, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Len returns the number of items present
 // in the List of a builder
-func (b *ListBuilder) Len() (int, error) {
-	l, err := b.List()
-	if err != nil {
-		return 0, err
-	}
-
-	return l.Len(), nil
-}
+func (b *ListBuilder) Len() (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // APIList builds core API PVC list using listbuilder
 func (b *ListBuilder) APIList() (*corev1.PersistentVolumeClaimList, error) {
-	l, err := b.List()
-	if err != nil {
-		return nil, err
-	}
-
-	return l.ToAPIList(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

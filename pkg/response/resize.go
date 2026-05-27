@@ -26,29 +26,29 @@ type ControllerExpandVolumeResponseBuilder struct {
 // NewControllerExpandVolumeResponseBuilder returns a new
 // instance of ControllerExpandVolumeResponse
 func NewControllerExpandVolumeResponseBuilder() *ControllerExpandVolumeResponseBuilder {
-	return &ControllerExpandVolumeResponseBuilder{
-		response: &csi.ControllerExpandVolumeResponse{},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithCapacityBytes sets the CapacityBytes against the
 // ControllerExpandVolumeResponse instance
 func (b *ControllerExpandVolumeResponseBuilder) WithCapacityBytes(
 	capacity int64) *ControllerExpandVolumeResponseBuilder {
-	b.response.CapacityBytes = capacity
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithNodeExpansionRequired sets the NodeExpansionRequired against the
 // ControllerExpandVolumeResponse instance
 func (b *ControllerExpandVolumeResponseBuilder) WithNodeExpansionRequired(
 	nodeExpansionRequired bool) *ControllerExpandVolumeResponseBuilder {
-	b.response.NodeExpansionRequired = nodeExpansionRequired
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns the constructed instance
 // of csi ControllerExpandVolumeResponse
 func (b *ControllerExpandVolumeResponseBuilder) Build() *csi.ControllerExpandVolumeResponse {
-	return b.response
+	_ = "STUB: not implemented"
+	return nil
 }

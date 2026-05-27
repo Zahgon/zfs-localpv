@@ -18,67 +18,26 @@ package volume
 
 import (
 	"sync"
-
-	"github.com/pkg/errors"
-
-	"time"
-
-	k8sapi "github.com/openebs/lib-csi/pkg/client/k8s"
-	clientset "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned"
-	informers "github.com/openebs/zfs-localpv/pkg/generated/informer/externalversions"
-	kubeinformers "k8s.io/client-go/informers"
-	"k8s.io/client-go/kubernetes"
 )
 
 // Start starts the zfsvolume controller.
 func Start(controllerMtx *sync.RWMutex, stopCh <-chan struct{}) error {
+	_ = "STUB: not implemented"
 
 	// Get in cluster config
-	cfg, err := k8sapi.Config().Get()
-	if err != nil {
-		return errors.Wrap(err, "error building kubeconfig")
-	}
-
-	// Building Kubernetes Clientset
-	kubeClient, err := kubernetes.NewForConfig(cfg)
-	if err != nil {
-		return errors.Wrap(err, "error building kubernetes clientset")
-	}
-
-	// Building OpenEBS Clientset
-	openebsClient, err := clientset.NewForConfig(cfg)
-	if err != nil {
-		return errors.Wrap(err, "error building openebs clientset")
-	}
-
-	kubeInformerFactory := kubeinformers.NewSharedInformerFactory(kubeClient, time.Second*30)
-	zvInformerFactory := informers.NewSharedInformerFactory(openebsClient, time.Second*30)
-	// Build() fn of all controllers calls AddToScheme to adds all types of this
-	// clientset into the given scheme.
-	// If multiple controllers happen to call this AddToScheme same time,
-	// it causes panic with error saying concurrent map access.
-	// This lock is used to serialize the AddToScheme call of all controllers.
-	controllerMtx.Lock()
-
-	controller, err := NewZVControllerBuilder().
-		withKubeClient(kubeClient).
-		withOpenEBSClient(openebsClient).
-		withZVSynced(zvInformerFactory).
-		withZVLister(zvInformerFactory).
-		withRecorder(kubeClient).
-		withEventHandler(zvInformerFactory).
-		withWorkqueueRateLimiting().Build()
-
-	// blocking call, can't use defer to release the lock
-	controllerMtx.Unlock()
-
-	if err != nil {
-		return errors.Wrapf(err, "error building controller instance")
-	}
-
-	go kubeInformerFactory.Start(stopCh)
-	go zvInformerFactory.Start(stopCh)
-
-	// Threadiness defines the number of workers to be launched in Run function
-	return controller.Run(2, stopCh)
+	return nil
 }
+
+// Building Kubernetes Clientset
+
+// Building OpenEBS Clientset
+
+// Build() fn of all controllers calls AddToScheme to adds all types of this
+// clientset into the given scheme.
+// If multiple controllers happen to call this AddToScheme same time,
+// it causes panic with error saying concurrent map access.
+// This lock is used to serialize the AddToScheme call of all controllers.
+
+// blocking call, can't use defer to release the lock
+
+// Threadiness defines the number of workers to be launched in Run function

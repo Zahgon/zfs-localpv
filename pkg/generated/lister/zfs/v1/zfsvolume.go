@@ -27,12 +27,14 @@ type zFSVolumeLister struct {
 
 // NewZFSVolumeLister returns a new ZFSVolumeLister.
 func NewZFSVolumeLister(indexer cache.Indexer) ZFSVolumeLister {
-	return &zFSVolumeLister{listers.New[*zfsv1.ZFSVolume](indexer, zfsv1.Resource("zfsvolume"))}
+	_ = "STUB: not implemented"
+	return *new(ZFSVolumeLister)
 }
 
 // ZFSVolumes returns an object that can list and get ZFSVolumes.
 func (s *zFSVolumeLister) ZFSVolumes(namespace string) ZFSVolumeNamespaceLister {
-	return zFSVolumeNamespaceLister{listers.NewNamespaced[*zfsv1.ZFSVolume](s.ResourceIndexer, namespace)}
+	_ = "STUB: not implemented"
+	return *new(ZFSVolumeNamespaceLister)
 }
 
 // ZFSVolumeNamespaceLister helps list and get ZFSVolumes.

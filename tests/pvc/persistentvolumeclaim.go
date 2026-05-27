@@ -15,8 +15,6 @@
 package pvc
 
 import (
-	"strings"
-
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -36,28 +34,17 @@ type List struct {
 
 // Len returns the number of items present
 // in the List
-func (p *List) Len() int {
-	return len(p.items)
-}
+func (p *List) Len() int { _ = "STUB: not implemented"; return 0 }
 
 // ToAPIList converts List to API List
-func (p *List) ToAPIList() *corev1.PersistentVolumeClaimList {
-	plist := &corev1.PersistentVolumeClaimList{}
-	for _, pvc := range p.items {
-		plist.Items = append(plist.Items, *pvc.object)
-	}
-	return plist
-}
+func (p *List) ToAPIList() *corev1.PersistentVolumeClaimList { _ = "STUB: not implemented"; return nil }
 
 type pvcBuildOption func(*PVC)
 
 // NewForAPIObject returns a new instance of PVC
 func NewForAPIObject(obj *corev1.PersistentVolumeClaim, opts ...pvcBuildOption) *PVC {
-	p := &PVC{object: obj}
-	for _, o := range opts {
-		o(p)
-	}
-	return p
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Predicate defines an abstraction
@@ -66,39 +53,23 @@ func NewForAPIObject(obj *corev1.PersistentVolumeClaim, opts ...pvcBuildOption) 
 type Predicate func(*PVC) bool
 
 // IsBound returns true if the pvc is bounded
-func (p *PVC) IsBound() bool {
-	return p.object.Status.Phase == corev1.ClaimBound
-}
+func (p *PVC) IsBound() bool { _ = "STUB: not implemented"; return false }
 
 // IsBound is a predicate to filter out pvcs
 // which is bounded
-func IsBound() Predicate {
-	return func(p *PVC) bool {
-		return p.IsBound()
-	}
-}
+func IsBound() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // IsNil returns true if the PVC instance
 // is nil
-func (p *PVC) IsNil() bool {
-	return p.object == nil
-}
+func (p *PVC) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsNil is predicate to filter out nil PVC
 // instances
-func IsNil() Predicate {
-	return func(p *PVC) bool {
-		return p.IsNil()
-	}
-}
+func IsNil() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // ContainsName is filter function to filter pvc's
 // based on the name
-func ContainsName(name string) Predicate {
-	return func(p *PVC) bool {
-		return strings.Contains(p.object.GetName(), name)
-	}
-}
+func ContainsName(name string) Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // PredicateList holds a list of predicate
 type PredicateList []Predicate
@@ -106,11 +77,4 @@ type PredicateList []Predicate
 // all returns true if all the predicates
 // succeed against the provided pvc
 // instance
-func (l PredicateList) all(p *PVC) bool {
-	for _, pred := range l {
-		if !pred(p) {
-			return false
-		}
-	}
-	return true
-}
+func (l PredicateList) all(p *PVC) bool { _ = "STUB: not implemented"; return false }

@@ -20,18 +20,13 @@ import (
 	"time"
 
 	clientset "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned"
-	openebsScheme "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned/scheme"
 	informers "github.com/openebs/zfs-localpv/pkg/generated/informer/externalversions"
 	listers "github.com/openebs/zfs-localpv/pkg/generated/lister/zfs/v1"
-	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/kubernetes/scheme"
-	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
-	"k8s.io/klog/v2"
 )
 
 const controllerAgentName = "zfsnode-controller"
@@ -73,85 +68,67 @@ type NodeControllerBuilder struct {
 }
 
 // NewNodeControllerBuilder returns an empty instance of controller builder.
-func NewNodeControllerBuilder() *NodeControllerBuilder {
-	return &NodeControllerBuilder{
-		NodeController: &NodeController{},
-	}
-}
+func NewNodeControllerBuilder() *NodeControllerBuilder { _ = "STUB: not implemented"; return nil }
 
 // withKubeClient fills kube client to controller object.
 func (cb *NodeControllerBuilder) withKubeClient(ks kubernetes.Interface) *NodeControllerBuilder {
-	cb.NodeController.kubeclientset = ks
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withOpenEBSClient fills openebs client to controller object.
 func (cb *NodeControllerBuilder) withOpenEBSClient(cs clientset.Interface) *NodeControllerBuilder {
-	cb.NodeController.clientset = cs
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withNodeLister fills Node lister to controller object.
 func (cb *NodeControllerBuilder) withNodeLister(sl informers.SharedInformerFactory) *NodeControllerBuilder {
-	NodeInformer := sl.Zfs().V1().ZFSNodes()
-	cb.NodeController.NodeLister = NodeInformer.Lister()
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withNodeSynced adds object sync information in cache to controller object.
 func (cb *NodeControllerBuilder) withNodeSynced(sl informers.SharedInformerFactory) *NodeControllerBuilder {
-	NodeInformer := sl.Zfs().V1().ZFSNodes()
-	cb.NodeController.NodeSynced = NodeInformer.Informer().HasSynced
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withWorkqueue adds workqueue to controller object.
 func (cb *NodeControllerBuilder) withWorkqueueRateLimiting() *NodeControllerBuilder {
-	cb.NodeController.workqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Node")
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withRecorder adds recorder to controller object.
 func (cb *NodeControllerBuilder) withRecorder(ks kubernetes.Interface) *NodeControllerBuilder {
-	klog.Infof("Creating event broadcaster")
-	eventBroadcaster := record.NewBroadcaster()
-	eventBroadcaster.StartLogging(klog.Infof)
-	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: ks.CoreV1().Events("")})
-	recorder := eventBroadcaster.NewRecorder(scheme.Scheme, corev1.EventSource{Component: controllerAgentName})
-	cb.NodeController.recorder = recorder
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withEventHandler adds event handlers controller object.
 func (cb *NodeControllerBuilder) withEventHandler(cvcInformerFactory informers.SharedInformerFactory) *NodeControllerBuilder {
-	cvcInformer := cvcInformerFactory.Zfs().V1().ZFSNodes()
-	// Set up an event handler for when zfs node vg change.
-	// Note: rather than setting up the resync period at informer level,
-	// we are controlling the syncing based on pollInternal. See
-	// NodeController#Run func for more details.
-	cvcInformer.Informer().AddEventHandlerWithResyncPeriod(cache.ResourceEventHandlerFuncs{
-		AddFunc:    cb.NodeController.addNode,
-		UpdateFunc: cb.NodeController.updateNode,
-		DeleteFunc: cb.NodeController.deleteNode,
-	}, 0)
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// Set up an event handler for when zfs node vg change.
+// Note: rather than setting up the resync period at informer level,
+// we are controlling the syncing based on pollInternal. See
+// NodeController#Run func for more details.
+
 func (cb *NodeControllerBuilder) withPollInterval(interval time.Duration) *NodeControllerBuilder {
-	cb.NodeController.pollInterval = interval
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cb *NodeControllerBuilder) withOwnerReference(ownerRef metav1.OwnerReference) *NodeControllerBuilder {
-	cb.NodeController.ownerRef = ownerRef
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns a controller instance.
 func (cb *NodeControllerBuilder) Build() (*NodeController, error) {
-	err := openebsScheme.AddToScheme(scheme.Scheme)
-	if err != nil {
-		return nil, err
-	}
-	return cb.NodeController, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

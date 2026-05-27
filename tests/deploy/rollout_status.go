@@ -17,10 +17,7 @@ limitations under the License.
 package deploy
 
 import (
-	"encoding/json"
 	"fmt"
-
-	"github.com/pkg/errors"
 )
 
 // rolloutStatus  is a typed function that
@@ -101,35 +98,16 @@ type rolloutBuildOption func(*Rollout)
 // NewRollout returns new instance of rollout meant for
 // rolloutOutput. caller can configure it with different
 // rolloutOutputBuildOption
-func NewRollout(opts ...rolloutBuildOption) *Rollout {
-	r := &Rollout{}
-	for _, o := range opts {
-		o(r)
-	}
-	r.withDefaults()
-	return r
-}
+func NewRollout(opts ...rolloutBuildOption) *Rollout { _ = "STUB: not implemented"; return nil }
 
 // withOutputObject sets rolloutOutput in rollout instance
 func withOutputObject(o *RolloutOutput) rolloutBuildOption {
-	return func(r *Rollout) {
-		r.output = o
-	}
+	_ = "STUB: not implemented"
+	return *new(rolloutBuildOption)
 }
 
 // withDefaults sets the default options of rolloutBuilder instance
-func (r *Rollout) withDefaults() {
-	if r.raw == nil {
-		r.raw = func(o *RolloutOutput) ([]byte, error) {
-			return json.Marshal(o)
-		}
-	}
-}
+func (r *Rollout) withDefaults() { _ = "STUB: not implemented"; return }
 
 // Raw returns raw bytes outpot of rollout
-func (r *Rollout) Raw() ([]byte, error) {
-	if r.output == nil {
-		return nil, errors.New("unable to get rollout status output")
-	}
-	return r.raw(r.output)
-}
+func (r *Rollout) Raw() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }

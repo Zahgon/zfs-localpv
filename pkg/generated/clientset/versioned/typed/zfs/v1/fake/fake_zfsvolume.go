@@ -15,18 +15,6 @@ type fakeZFSVolumes struct {
 }
 
 func newFakeZFSVolumes(fake *FakeZfsV1, namespace string) zfsv1.ZFSVolumeInterface {
-	return &fakeZFSVolumes{
-		gentype.NewFakeClientWithList[*v1.ZFSVolume, *v1.ZFSVolumeList](
-			fake.Fake,
-			namespace,
-			v1.SchemeGroupVersion.WithResource("zfsvolumes"),
-			v1.SchemeGroupVersion.WithKind("ZFSVolume"),
-			func() *v1.ZFSVolume { return &v1.ZFSVolume{} },
-			func() *v1.ZFSVolumeList { return &v1.ZFSVolumeList{} },
-			func(dst, src *v1.ZFSVolumeList) { dst.ListMeta = src.ListMeta },
-			func(list *v1.ZFSVolumeList) []*v1.ZFSVolume { return gentype.ToPointerSlice(list.Items) },
-			func(list *v1.ZFSVolumeList, items []*v1.ZFSVolume) { list.Items = gentype.FromPointerSlice(items) },
-		),
-		fake,
-	}
+	_ = "STUB: not implemented"
+	return *new(zfsv1.ZFSVolumeInterface)
 }

@@ -27,12 +27,14 @@ type zFSRestoreLister struct {
 
 // NewZFSRestoreLister returns a new ZFSRestoreLister.
 func NewZFSRestoreLister(indexer cache.Indexer) ZFSRestoreLister {
-	return &zFSRestoreLister{listers.New[*zfsv1.ZFSRestore](indexer, zfsv1.Resource("zfsrestore"))}
+	_ = "STUB: not implemented"
+	return *new(ZFSRestoreLister)
 }
 
 // ZFSRestores returns an object that can list and get ZFSRestores.
 func (s *zFSRestoreLister) ZFSRestores(namespace string) ZFSRestoreNamespaceLister {
-	return zFSRestoreNamespaceLister{listers.NewNamespaced[*zfsv1.ZFSRestore](s.ResourceIndexer, namespace)}
+	_ = "STUB: not implemented"
+	return *new(ZFSRestoreNamespaceLister)
 }
 
 // ZFSRestoreNamespaceLister helps list and get ZFSRestores.

@@ -29,51 +29,48 @@ type CreateVolumeResponseBuilder struct {
 // NewCreateVolumeResponseBuilder returns a new
 // instance of CreateVolumeResponseBuilder
 func NewCreateVolumeResponseBuilder() *CreateVolumeResponseBuilder {
-	return &CreateVolumeResponseBuilder{
-		response: &csi.CreateVolumeResponse{
-			Volume: &csi.Volume{},
-		},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithName sets the name against the
 // CreateVolumeResponse instance
 func (b *CreateVolumeResponseBuilder) WithName(name string) *CreateVolumeResponseBuilder {
-	b.response.Volume.VolumeId = name
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithCapacity sets the capacity against the
 // CreateVolumeResponse instance
 func (b *CreateVolumeResponseBuilder) WithCapacity(capacity int64) *CreateVolumeResponseBuilder {
-	b.response.Volume.CapacityBytes = capacity
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithContext sets the context against the
 // CreateVolumeResponse instance
 func (b *CreateVolumeResponseBuilder) WithContext(ctx map[string]string) *CreateVolumeResponseBuilder {
-	b.response.Volume.VolumeContext = ctx
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithContentSource sets the contentSource against the
 // CreateVolumeResponse instance
 func (b *CreateVolumeResponseBuilder) WithContentSource(cnt *csi.VolumeContentSource) *CreateVolumeResponseBuilder {
-	b.response.Volume.ContentSource = cnt
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithTopology sets the topology for the
 // CreateVolumeResponse instance
 func (b *CreateVolumeResponseBuilder) WithTopology(topology map[string]string) *CreateVolumeResponseBuilder {
-	b.response.Volume.AccessibleTopology = make([]*csi.Topology, 1)
-	b.response.Volume.AccessibleTopology[0] = &csi.Topology{Segments: topology}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns the constructed instance
 // of csi CreateVolumeResponse
 func (b *CreateVolumeResponseBuilder) Build() *csi.CreateVolumeResponse {
-	return b.response
+	_ = "STUB: not implemented"
+	return nil
 }

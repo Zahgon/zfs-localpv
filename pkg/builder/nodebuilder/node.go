@@ -18,7 +18,6 @@ package nodebuilder
 
 import (
 	apis "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
-	"github.com/pkg/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -37,86 +36,29 @@ type ZFSNode struct {
 
 // From returns a new instance of
 // zfs volume
-func From(node *apis.ZFSNode) *ZFSNode {
-	return &ZFSNode{
-		Object: node,
-	}
-}
+func From(node *apis.ZFSNode) *ZFSNode { _ = "STUB: not implemented"; return nil }
 
 // NewBuilder returns new instance of Builder
-func NewBuilder() *Builder {
-	return &Builder{
-		node: &ZFSNode{
-			Object: &apis.ZFSNode{},
-		},
-	}
-}
+func NewBuilder() *Builder { _ = "STUB: not implemented"; return nil }
 
 // BuildFrom returns new instance of Builder
 // from the provided api instance
-func BuildFrom(node *apis.ZFSNode) *Builder {
-	if node == nil {
-		b := NewBuilder()
-		b.errs = append(
-			b.errs,
-			errors.New("failed to build zfs node object: nil node"),
-		)
-		return b
-	}
-	return &Builder{
-		node: &ZFSNode{
-			Object: node,
-		},
-	}
-}
+func BuildFrom(node *apis.ZFSNode) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithNamespace sets the namespace of ZFSNode
-func (b *Builder) WithNamespace(namespace string) *Builder {
-	if namespace == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs node object: missing namespace",
-			),
-		)
-		return b
-	}
-	b.node.Object.Namespace = namespace
-	return b
-}
+func (b *Builder) WithNamespace(namespace string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithName sets the name of ZFSNode
-func (b *Builder) WithName(name string) *Builder {
-	if name == "" {
-		b.errs = append(
-			b.errs,
-			errors.New(
-				"failed to build zfs node object: missing name",
-			),
-		)
-		return b
-	}
-	b.node.Object.Name = name
-	return b
-}
+func (b *Builder) WithName(name string) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithPools sets the pools of ZFSNode
-func (b *Builder) WithPools(pools []apis.Pool) *Builder {
-	b.node.Object.Pools = pools
-	return b
-}
+func (b *Builder) WithPools(pools []apis.Pool) *Builder { _ = "STUB: not implemented"; return nil }
 
 // WithOwnerReferences sets the owner references of ZFSNode
 func (b *Builder) WithOwnerReferences(ownerRefs ...metav1.OwnerReference) *Builder {
-	b.node.Object.OwnerReferences = ownerRefs
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Build returns ZFSNode API object
-func (b *Builder) Build() (*apis.ZFSNode, error) {
-	if len(b.errs) > 0 {
-		return nil, errors.Errorf("%+v", b.errs)
-	}
-
-	return b.node.Object, nil
-}
+func (b *Builder) Build() (*apis.ZFSNode, error) { _ = "STUB: not implemented"; return nil, nil }

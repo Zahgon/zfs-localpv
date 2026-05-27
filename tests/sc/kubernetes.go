@@ -17,10 +17,6 @@ limitations under the License.
 package sc
 
 import (
-	"context"
-
-	"github.com/openebs/lib-csi/pkg/common/errors"
-	client "github.com/openebs/lib-csi/pkg/common/kubernetes/client"
 	storagev1 "k8s.io/api/storage/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -73,123 +69,61 @@ type Kubeclient struct {
 // to build a kubeclient instance
 type KubeClientBuildOption func(*Kubeclient)
 
-func (k *Kubeclient) withDefaults() {
-	if k.getClientset == nil {
-		k.getClientset = func() (clients *kubernetes.Clientset, err error) {
-			return client.New().Clientset()
-		}
-	}
-	if k.getClientsetForPath == nil {
-		k.getClientsetForPath = func(kubeConfigPath string) (clients *kubernetes.Clientset, err error) {
-			return client.New(client.WithKubeConfigPath(kubeConfigPath)).Clientset()
-		}
-	}
-	if k.list == nil {
-		k.list = func(cli *kubernetes.Clientset, opts metav1.ListOptions) (*storagev1.StorageClassList, error) {
-			return cli.StorageV1().StorageClasses().List(context.TODO(), opts)
-		}
-	}
-	if k.get == nil {
-		k.get = func(cli *kubernetes.Clientset, name string, opts metav1.GetOptions) (*storagev1.StorageClass, error) {
-			return cli.StorageV1().StorageClasses().Get(context.TODO(), name, opts)
-		}
-	}
-	if k.create == nil {
-		k.create = func(cli *kubernetes.Clientset, sc *storagev1.StorageClass) (*storagev1.StorageClass, error) {
-			return cli.StorageV1().StorageClasses().Create(context.TODO(), sc, metav1.CreateOptions{})
-		}
-	}
-	if k.del == nil {
-		k.del = func(cli *kubernetes.Clientset, name string, opts *metav1.DeleteOptions) error {
-			return cli.StorageV1().StorageClasses().Delete(context.TODO(), name, *opts)
-		}
-	}
-}
+func (k *Kubeclient) withDefaults() { _ = "STUB: not implemented"; return }
 
 // NewKubeClient returns a new instance of kubeclient meant for storageclass
 func NewKubeClient(opts ...KubeClientBuildOption) *Kubeclient {
-	k := &Kubeclient{}
-	for _, o := range opts {
-		o(k)
-	}
-	k.withDefaults()
-	return k
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WithClientSet sets the kubernetes client against
 // the kubeclient instance
 func WithClientSet(c *kubernetes.Clientset) KubeClientBuildOption {
-	return func(k *Kubeclient) {
-		k.clientset = c
-	}
+	_ = "STUB: not implemented"
+	return *new(KubeClientBuildOption)
 }
 
 // WithKubeConfigPath sets the kubeConfig path
 // against client instance
 func WithKubeConfigPath(path string) KubeClientBuildOption {
-	return func(k *Kubeclient) {
-		k.kubeConfigPath = path
-	}
+	_ = "STUB: not implemented"
+	return *new(KubeClientBuildOption)
 }
 
 func (k *Kubeclient) getClientsetForPathOrDirect() (*kubernetes.Clientset, error) {
-	if k.kubeConfigPath != "" {
-		return k.getClientsetForPath(k.kubeConfigPath)
-	}
-	return k.getClientset()
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // getClientsetOrCached returns either a new
 // instance of kubernetes clientset or its
 // cached copy cached copy
 func (k *Kubeclient) getClientsetOrCached() (*kubernetes.Clientset, error) {
-	if k.clientset != nil {
-		return k.clientset, nil
-	}
-
-	cs, err := k.getClientsetForPathOrDirect()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get clientset")
-	}
-	k.clientset = cs
-	return k.clientset, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // List returns a list of storageclass instances present in kubernetes cluster
 func (k *Kubeclient) List(opts metav1.ListOptions) (*storagev1.StorageClassList, error) {
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to list storageclasses")
-	}
-	return k.list(cli, opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Get return a storageclass instance present in kubernetes cluster
 func (k *Kubeclient) Get(name string, opts metav1.GetOptions) (*storagev1.StorageClass, error) {
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to get storageclass {%s}", name)
-	}
-	return k.get(cli, name, opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Create creates and returns a storageclass instance
 func (k *Kubeclient) Create(sc *storagev1.StorageClass) (*storagev1.StorageClass, error) {
-	if sc == nil {
-		return nil, errors.New("failed to create storageclass: nil storageclass object")
-	}
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to create storageclass")
-	}
-	return k.create(cli, sc)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Delete deletes the storageclass if present in kubernetes cluster
 func (k *Kubeclient) Delete(name string, opts *metav1.DeleteOptions) error {
-	cli, err := k.getClientsetOrCached()
-	if err != nil {
-		return errors.Wrapf(err, "failed to delete storageclass: {%s}", name)
-	}
-	return k.del(cli, name, opts)
+	_ = "STUB: not implemented"
+	return nil
 }

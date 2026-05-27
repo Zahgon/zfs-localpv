@@ -16,20 +16,9 @@ package zfs
 
 import (
 	"context"
-	"fmt"
 	"os"
-	"strconv"
-	"time"
 
-	k8sapi "github.com/openebs/lib-csi/pkg/client/k8s"
 	apis "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
-	"github.com/openebs/zfs-localpv/pkg/builder/bkpbuilder"
-	"github.com/openebs/zfs-localpv/pkg/builder/restorebuilder"
-	"github.com/openebs/zfs-localpv/pkg/builder/snapbuilder"
-	"github.com/openebs/zfs-localpv/pkg/builder/volbuilder"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
 )
 
@@ -118,53 +107,13 @@ func init() {
 // It may return an error whilst fetching the node using the k8sapi.
 // If the K8s node object does contain the topology label, then the nodename
 // itself is returned as the Node ID.
-func GetNodeID(nodename string) (string, error) {
-	node, err := k8sapi.GetNode(nodename)
-	if err != nil {
-		return "", fmt.Errorf("failed to get the node %s: %w", nodename, err)
-	}
+func GetNodeID(nodename string) (string, error) { _ = "STUB: not implemented"; return "", nil }
 
-	nodeid, ok := node.Labels[ZFSTopologyKey]
-	if !ok {
-		// node is not labelled, use node name as nodeid
-		return nodename, nil
-	}
-	return nodeid, nil
-}
+// node is not labelled, use node name as nodeid
 
 func checkVolCreation(ctx context.Context, volname string) (bool, error) {
-	timeout := time.NewTimer(10 * time.Second)
-	defer timeout.Stop()
-
-	for {
-		select {
-		case <-ctx.Done():
-			return true, status.Errorf(codes.DeadlineExceeded,
-				"volume %s creation: context deadline reached", volname)
-		case <-timeout.C:
-			return true, status.Errorf(codes.DeadlineExceeded,
-				"volume %s creation timed out", volname)
-		default:
-			vol, err := GetZFSVolume(volname)
-			if err != nil {
-				return false, status.Errorf(codes.Internal,
-					"volume creation wait failed, not able to get the volume %s: %s", volname, err.Error())
-			}
-
-			switch vol.Status.State {
-			case ZFSStatusReady:
-				return false, nil
-			case ZFSStatusFailed:
-				return false, status.Errorf(codes.Internal,
-					"volume %s creation failed on node %s", volname, vol.Spec.OwnerNodeID)
-			}
-
-			klog.Infof("zfs: waiting for volume %s/%s to be created on nodeid %s",
-				vol.Spec.PoolName, volname, vol.Spec.OwnerNodeID)
-
-			time.Sleep(time.Second)
-		}
-	}
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // ProvisionVolume creates a ZFSVolume(zv) CR,
@@ -173,336 +122,134 @@ func ProvisionVolume(
 	ctx context.Context,
 	vol *apis.ZFSVolume,
 ) (bool, error) {
-	timeout := false
-	zv, err := GetZFSVolume(vol.Name)
-
-	if err == nil {
-		// update the spec and status
-		zv.Spec = vol.Spec
-		zv.Status = vol.Status
-		_, err = volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(zv)
-	} else {
-		_, err = volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Create(vol)
-	}
-
-	if err == nil {
-		timeout, err = checkVolCreation(ctx, vol.Name)
-	}
-
-	if err != nil {
-		klog.Infof("zfs: volume %s/%s provisioning failed on nodeid %s err: %s",
-			vol.Spec.PoolName, vol.Name, vol.Spec.OwnerNodeID, err.Error())
-	}
-
-	return timeout, err
+	_ = "STUB: not implemented"
+	return false, nil
 }
+
+// update the spec and status
 
 // ResizeVolume resizes the zfs volume
-func ResizeVolume(vol *apis.ZFSVolume, newSize int64) error {
-
-	vol.Spec.Capacity = strconv.FormatInt(int64(newSize), 10)
-
-	_, err := volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(vol)
-	return err
-}
+func ResizeVolume(vol *apis.ZFSVolume, newSize int64) error { _ = "STUB: not implemented"; return nil }
 
 // ProvisionSnapshot creates a ZFSSnapshot CR,
 // watcher for zvc is present in CSI agent
 func ProvisionSnapshot(
 	snap *apis.ZFSSnapshot,
 ) error {
-
-	_, err := snapbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Create(snap)
-	if err == nil {
-		klog.Infof("provisioned snapshot %s", snap.Name)
-	}
-
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // DeleteSnapshot deletes the corresponding ZFSSnapshot CR
-func DeleteSnapshot(snapname string) (err error) {
-	err = snapbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Delete(snapname)
-	if err == nil {
-		klog.Infof("deprovisioned snapshot %s", snapname)
-	}
-
-	return
-}
+func DeleteSnapshot(snapname string) (err error) { _ = "STUB: not implemented"; return nil }
 
 // DeleteVolume deletes the corresponding ZFSVol CR
-func DeleteVolume(volumeID string) (err error) {
-	err = volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Delete(volumeID)
-	if err == nil {
-		klog.Infof("zfs: deleted the volume %s", volumeID)
-	} else {
-		klog.Infof("zfs: volume %s deletion failed %s", volumeID, err.Error())
-	}
-
-	return
-}
+func DeleteVolume(volumeID string) (err error) { _ = "STUB: not implemented"; return nil }
 
 // GetVolList fetches the current Published Volume list
 func GetVolList(volumeID string) (*apis.ZFSVolumeList, error) {
-	listOptions := metav1.ListOptions{
-		LabelSelector: ZFSNodeKey + "=" + NodeID,
-	}
-
-	return volbuilder.NewKubeclient().
-		WithNamespace(OpenEBSNamespace).List(listOptions)
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetZFSVolume fetches the given ZFSVolume
 func GetZFSVolume(volumeID string) (*apis.ZFSVolume, error) {
-	getOptions := metav1.GetOptions{}
-	vol, err := volbuilder.NewKubeclient().
-		WithNamespace(OpenEBSNamespace).Get(volumeID, getOptions)
-	return vol, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UpdateZFSVolumeAnnotation updtates the ZFSVolume CR with the given annotation
-func UpdateZFSVolumeAnnotation(vol *apis.ZFSVolume) error {
-	newVol, err := volbuilder.BuildFrom(vol).
-		WithAnnotation().Build()
-
-	if err != nil {
-		return err
-	}
-	_, err = volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(newVol)
-	return err
-}
+func UpdateZFSVolumeAnnotation(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
 // GetZFSVolumeState returns ZFSVolume OwnerNode and State for
 // the given volume. CreateVolume request may call it again and
 // again until volume is "Ready".
 func GetZFSVolumeState(volID string) (string, string, error) {
-	getOptions := metav1.GetOptions{}
-	vol, err := volbuilder.NewKubeclient().
-		WithNamespace(OpenEBSNamespace).Get(volID, getOptions)
-
-	if err != nil {
-		return "", "", err
-	}
-
-	return vol.Spec.OwnerNodeID, vol.Status.State, nil
+	_ = "STUB: not implemented"
+	return "", "", nil
 }
 
 // UpdateZvolInfo updates ZFSVolume CR with node id and finalizer
 func UpdateZvolInfo(vol *apis.ZFSVolume, status string) error {
-	finalizers := []string{}
-	labels := map[string]string{ZFSNodeKey: NodeID}
-
-	switch status {
-	case ZFSStatusReady:
-		finalizers = append(finalizers, ZFSFinalizer)
-	}
-
-	newVol, err := volbuilder.BuildFrom(vol).
-		WithFinalizer(finalizers).
-		WithVolumeStatus(status).
-		WithLabels(labels).Build()
-
-	if err != nil {
-		return err
-	}
-
-	_, err = volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(newVol)
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RemoveVolumeFinalizer removes finalizer from ZFSVolume CR
-func RemoveVolumeFinalizer(vol *apis.ZFSVolume) error {
-	vol.Finalizers = nil
-
-	_, err := volbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(vol)
-	return err
-}
+func RemoveVolumeFinalizer(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
 // GetZFSSnapshot fetches the given ZFSSnapshot
 func GetZFSSnapshot(snapID string) (*apis.ZFSSnapshot, error) {
-	getOptions := metav1.GetOptions{}
-	snap, err := snapbuilder.NewKubeclient().
-		WithNamespace(OpenEBSNamespace).Get(snapID, getOptions)
-	return snap, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetZFSSnapshotStatus returns ZFSSnapshot status
-func GetZFSSnapshotStatus(snapID string) (string, error) {
-	getOptions := metav1.GetOptions{}
-	snap, err := snapbuilder.NewKubeclient().
-		WithNamespace(OpenEBSNamespace).Get(snapID, getOptions)
-
-	if err != nil {
-		klog.Errorf("Get snapshot failed %s err: %s", snap.Name, err.Error())
-		return "", err
-	}
-
-	return snap.Status.State, nil
-}
+func GetZFSSnapshotStatus(snapID string) (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // GetZFSSnapshotCapacity return capacity converted to int64
 func GetZFSSnapshotCapacity(snap *apis.ZFSSnapshot) (int64, error) {
-	if snap == nil {
-		return 0, fmt.Errorf("expect non-nil snapshot")
-	}
-
-	if snap.Spec.Capacity == "" {
-		return 0, nil
-	}
-
-	capacity, err := strconv.ParseInt(snap.Spec.Capacity, 10, 64)
-	if err != nil {
-		return 0, fmt.Errorf("convert %s to integer failed", snap.Spec.Capacity)
-	}
-
-	return capacity, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // UpdateSnapInfo updates ZFSSnapshot CR with node id and finalizer
-func UpdateSnapInfo(snap *apis.ZFSSnapshot) error {
-	finalizers := []string{ZFSFinalizer}
-	labels := map[string]string{ZFSNodeKey: NodeID}
+func UpdateSnapInfo(snap *apis.ZFSSnapshot) error { _ = "STUB: not implemented"; return nil }
 
-	newSnap, err := snapbuilder.BuildFrom(snap).
-		WithFinalizer(finalizers).
-		WithLabels(labels).Build()
-
-	// set the status to ready
-	newSnap.Status.State = ZFSStatusReady
-
-	if err != nil {
-		klog.Errorf("Update snapshot failed %s err: %s", snap.Name, err.Error())
-		return err
-	}
-
-	_, err = snapbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(newSnap)
-	return err
-}
+// set the status to ready
 
 // RemoveSnapFinalizer removes finalizer from ZFSSnapshot CR
-func RemoveSnapFinalizer(snap *apis.ZFSSnapshot) error {
-	snap.Finalizers = nil
-
-	_, err := snapbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(snap)
-	return err
-}
+func RemoveSnapFinalizer(snap *apis.ZFSSnapshot) error { _ = "STUB: not implemented"; return nil }
 
 // RemoveBkpFinalizer removes finalizer from ZFSBackup CR
-func RemoveBkpFinalizer(bkp *apis.ZFSBackup) error {
-	bkp.Finalizers = nil
-
-	_, err := bkpbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(bkp)
-	return err
-}
+func RemoveBkpFinalizer(bkp *apis.ZFSBackup) error { _ = "STUB: not implemented"; return nil }
 
 // UpdateBkpInfo updates the backup info with the status
 func UpdateBkpInfo(bkp *apis.ZFSBackup, status apis.ZFSBackupStatus) error {
-	finalizers := []string{ZFSFinalizer}
-	newBkp, err := bkpbuilder.BuildFrom(bkp).WithFinalizer(finalizers).Build()
-
-	// set the status
-	newBkp.Status = status
-
-	if err != nil {
-		klog.Errorf("Update backup failed %s err: %s", bkp.Spec.VolumeName, err.Error())
-		return err
-	}
-
-	_, err = bkpbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(newBkp)
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// set the status
 
 // UpdateRestoreInfo updates the rstr info with the status
 func UpdateRestoreInfo(rstr *apis.ZFSRestore, status apis.ZFSRestoreStatus) error {
-	newRstr, err := restorebuilder.BuildFrom(rstr).Build()
-
-	// set the status
-	newRstr.Status = status
-
-	if err != nil {
-		klog.Errorf("Update snapshot failed %s err: %s", rstr.Spec.VolumeName, err.Error())
-		return err
-	}
-
-	_, err = restorebuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).Update(newRstr)
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// set the status
 
 // GetUserFinalizers returns all the finalizers present on the ZFSVolume object
 // except the one owned by ZFS node daemonset. We also need to ignore the foregroundDeletion
 // finalizer as this will be present because of the foreground cascading deletion
-func GetUserFinalizers(finalizers []string) []string {
-	var userFin []string
-	for _, fin := range finalizers {
-		if fin != ZFSFinalizer &&
-			fin != "foregroundDeletion" {
-			userFin = append(userFin, fin)
-		}
-	}
-	return userFin
-}
+func GetUserFinalizers(finalizers []string) []string { _ = "STUB: not implemented"; return nil }
 
 // IsVolumeReady returns true if volume is Ready
 func IsVolumeReady(vol *apis.ZFSVolume) bool {
+	_ = "STUB: not implemented"
 	// The status was added to ZFSVolume since v0.8.0
-	if vol.Status.State != "" {
-		// For newer volumes created after v0.8.0, the status is sufficient to determine if the volume is ready
-		// If we check the finalizer to ensure the volume is Ready while the status is Pending or Failed
-		// the volume may never become Ready again when the controller provisions the volume again due to a timeout or controller crash
-		return vol.Status.State == ZFSStatusReady
-	}
-
-	// For older volumes created before v0.8.0, there was no Status field
-	// so checking the node finalizer to make sure volume is Ready
-	for _, fin := range vol.Finalizers {
-		if fin == ZFSFinalizer {
-			return true
-		}
-	}
-
 	return false
 }
 
+// For newer volumes created after v0.8.0, the status is sufficient to determine if the volume is ready
+// If we check the finalizer to ensure the volume is Ready while the status is Pending or Failed
+// the volume may never become Ready again when the controller provisions the volume again due to a timeout or controller crash
+
+// For older volumes created before v0.8.0, there was no Status field
+// so checking the node finalizer to make sure volume is Ready
+
 // GetSnapshotForVolume fetches all the snapshots for the given volume
 func GetSnapshotForVolume(volumeID string) (*apis.ZFSSnapshotList, error) {
-	listOptions := metav1.ListOptions{
-		LabelSelector: ZFSVolKey + "=" + volumeID,
-	}
-	snapList, err := snapbuilder.NewKubeclient().WithNamespace(OpenEBSNamespace).List(listOptions)
-	return snapList, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MarkForDeletion marks the volume for deletion by adding the annotation
-func MarkForDeletion(volumeName string) error {
-	zv, err := GetZFSVolume(volumeName)
-	if err != nil {
-		klog.Errorf("failed to get ZV %s: %v", volumeName, err)
-		return err
-	}
-
-	err = UpdateZFSVolumeAnnotation(zv)
-	if err != nil {
-		klog.Errorf("Failed to annotate the ZV with marked for deletion %s: %v", volumeName, err)
-		return err
-	}
-	return nil
-}
+func MarkForDeletion(volumeName string) error { _ = "STUB: not implemented"; return nil }
 
 // IsVolumeEligibleForDeletion checks if the volume can be deleted or not
 func IsVolumeEligibleForDeletion(volumeName string) (bool, error) {
-
-	zfsVol, err := GetZFSVolume(volumeName)
-	if err != nil {
-		return false, status.Errorf(
-			codes.Internal,
-			"failed to get ZFSVolume %s: %v",
-			volumeName,
-			err,
-		)
-	}
-	if zfsVol.Annotations[volbuilder.MarkForDeletionAnnotation] == "true" {
-		return true, nil
-	}
+	_ = "STUB: not implemented"
 	return false, nil
 }

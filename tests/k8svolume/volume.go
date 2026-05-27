@@ -29,11 +29,8 @@ type volumeBuildOption func(*Volume)
 
 // NewForAPIObject returns a new instance of Volume
 func NewForAPIObject(obj *corev1.Volume, opts ...volumeBuildOption) *Volume {
-	v := &Volume{object: obj}
-	for _, o := range opts {
-		o(v)
-	}
-	return v
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Predicate defines an abstraction
@@ -43,17 +40,11 @@ type Predicate func(*Volume) bool
 
 // IsNil returns true if the Volume instance
 // is nil
-func (v *Volume) IsNil() bool {
-	return v.object == nil
-}
+func (v *Volume) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsNil is predicate to filter out nil Volume
 // instances
-func IsNil() Predicate {
-	return func(v *Volume) bool {
-		return v.IsNil()
-	}
-}
+func IsNil() Predicate { _ = "STUB: not implemented"; return *new(Predicate) }
 
 // PredicateList holds a list of predicate
 type PredicateList []Predicate

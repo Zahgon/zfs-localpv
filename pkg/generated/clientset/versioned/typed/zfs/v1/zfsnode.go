@@ -6,7 +6,6 @@ import (
 	context "context"
 
 	zfsv1 "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
-	scheme "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned/scheme"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -38,15 +37,4 @@ type zFSNodes struct {
 }
 
 // newZFSNodes returns a ZFSNodes
-func newZFSNodes(c *ZfsV1Client, namespace string) *zFSNodes {
-	return &zFSNodes{
-		gentype.NewClientWithList[*zfsv1.ZFSNode, *zfsv1.ZFSNodeList](
-			"zfsnodes",
-			c.RESTClient(),
-			scheme.ParameterCodec,
-			namespace,
-			func() *zfsv1.ZFSNode { return &zfsv1.ZFSNode{} },
-			func() *zfsv1.ZFSNodeList { return &zfsv1.ZFSNodeList{} },
-		),
-	}
-}
+func newZFSNodes(c *ZfsV1Client, namespace string) *zFSNodes { _ = "STUB: not implemented"; return nil }

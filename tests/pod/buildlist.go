@@ -28,55 +28,25 @@ type ListBuilder struct {
 }
 
 // NewListBuilder returns a instance of ListBuilder
-func NewListBuilder() *ListBuilder {
-	return &ListBuilder{list: &List{items: []*Pod{}}}
-}
+func NewListBuilder() *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // ListBuilderForAPIList returns a instance of ListBuilder from API List
 func ListBuilderForAPIList(pods *corev1.PodList) *ListBuilder {
-	b := &ListBuilder{list: &List{}}
-	if pods == nil {
-		return b
-	}
-	for _, p := range pods.Items {
-		p := p
-		b.list.items = append(b.list.items, &Pod{object: &p})
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ListBuilderForObjectList returns a instance of ListBuilder from API Pods
-func ListBuilderForObjectList(pods ...*Pod) *ListBuilder {
-	b := &ListBuilder{list: &List{}}
-	if pods == nil {
-		return b
-	}
-	for _, p := range pods {
-		p := p
-		b.list.items = append(b.list.items, p)
-	}
-	return b
-}
+func ListBuilderForObjectList(pods ...*Pod) *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // List returns the list of pod
 // instances that was built by this
 // builder
-func (b *ListBuilder) List() *List {
-	if b.filters == nil || len(b.filters) == 0 {
-		return b.list
-	}
-	filtered := &List{}
-	for _, pod := range b.list.items {
-		if b.filters.all(pod) {
-			filtered.items = append(filtered.items, pod)
-		}
-	}
-	return filtered
-}
+func (b *ListBuilder) List() *List { _ = "STUB: not implemented"; return nil }
 
 // WithFilter add filters on which the pod
 // has to be filtered
 func (b *ListBuilder) WithFilter(pred ...Predicate) *ListBuilder {
-	b.filters = append(b.filters, pred...)
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }

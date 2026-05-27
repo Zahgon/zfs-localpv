@@ -19,15 +19,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	config "github.com/openebs/zfs-localpv/pkg/config"
-	"github.com/openebs/zfs-localpv/pkg/driver"
-	"github.com/openebs/zfs-localpv/pkg/version"
 	zfs "github.com/openebs/zfs-localpv/pkg/zfs"
 	"github.com/spf13/cobra"
-	"k8s.io/klog/v2"
 )
 
 /*
@@ -81,23 +77,4 @@ func main() {
 	}
 }
 
-func run(config *config.Config) {
-	if config.Version == "" {
-		config.Version = version.Current()
-	}
-
-	klog.Infof("ZFS Driver Version :- %s - commit :- %s", version.Current(), version.GetGitCommit())
-	klog.Infof(
-		"DriverName: %s Plugin: %s EndPoint: %s Node Name: %s",
-		config.DriverName,
-		config.PluginType,
-		config.Endpoint,
-		config.Nodename,
-	)
-
-	err := driver.New(config).Run()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	os.Exit(0)
-}
+func run(config *config.Config) { _ = "STUB: not implemented"; return }

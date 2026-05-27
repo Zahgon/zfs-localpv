@@ -28,30 +28,36 @@ type version struct {
 
 // New returns a new Interface.
 func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakListOptions internalinterfaces.TweakListOptionsFunc) Interface {
-	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
+	_ = "STUB: not implemented"
+	return *new(Interface)
 }
 
 // ZFSBackups returns a ZFSBackupInformer.
 func (v *version) ZFSBackups() ZFSBackupInformer {
-	return &zFSBackupInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	_ = "STUB: not implemented"
+	return *new(ZFSBackupInformer)
 }
 
 // ZFSNodes returns a ZFSNodeInformer.
 func (v *version) ZFSNodes() ZFSNodeInformer {
-	return &zFSNodeInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	_ = "STUB: not implemented"
+	return *new(ZFSNodeInformer)
 }
 
 // ZFSRestores returns a ZFSRestoreInformer.
 func (v *version) ZFSRestores() ZFSRestoreInformer {
-	return &zFSRestoreInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	_ = "STUB: not implemented"
+	return *new(ZFSRestoreInformer)
 }
 
 // ZFSSnapshots returns a ZFSSnapshotInformer.
 func (v *version) ZFSSnapshots() ZFSSnapshotInformer {
-	return &zFSSnapshotInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	_ = "STUB: not implemented"
+	return *new(ZFSSnapshotInformer)
 }
 
 // ZFSVolumes returns a ZFSVolumeInformer.
 func (v *version) ZFSVolumes() ZFSVolumeInformer {
-	return &zFSVolumeInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	_ = "STUB: not implemented"
+	return *new(ZFSVolumeInformer)
 }

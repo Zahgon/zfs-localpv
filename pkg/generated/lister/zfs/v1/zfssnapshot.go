@@ -27,12 +27,14 @@ type zFSSnapshotLister struct {
 
 // NewZFSSnapshotLister returns a new ZFSSnapshotLister.
 func NewZFSSnapshotLister(indexer cache.Indexer) ZFSSnapshotLister {
-	return &zFSSnapshotLister{listers.New[*zfsv1.ZFSSnapshot](indexer, zfsv1.Resource("zfssnapshot"))}
+	_ = "STUB: not implemented"
+	return *new(ZFSSnapshotLister)
 }
 
 // ZFSSnapshots returns an object that can list and get ZFSSnapshots.
 func (s *zFSSnapshotLister) ZFSSnapshots(namespace string) ZFSSnapshotNamespaceLister {
-	return zFSSnapshotNamespaceLister{listers.NewNamespaced[*zfsv1.ZFSSnapshot](s.ResourceIndexer, namespace)}
+	_ = "STUB: not implemented"
+	return *new(ZFSSnapshotNamespaceLister)
 }
 
 // ZFSSnapshotNamespaceLister helps list and get ZFSSnapshots.

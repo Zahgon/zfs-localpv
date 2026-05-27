@@ -17,7 +17,6 @@ limitations under the License.
 package sc
 
 import (
-	"github.com/openebs/lib-csi/pkg/common/errors"
 	storagev1 "k8s.io/api/storage/v1"
 )
 
@@ -29,74 +28,37 @@ type ListBuilder struct {
 }
 
 // NewListBuilder returns a instance of ListBuilder
-func NewListBuilder() *ListBuilder {
-	return &ListBuilder{list: &StorageClassList{items: []*StorageClass{}}}
-}
+func NewListBuilder() *ListBuilder { _ = "STUB: not implemented"; return nil }
 
 // ListBuilderForAPIList builds the ListBuilder object based on SC API list
 func ListBuilderForAPIList(scl *storagev1.StorageClassList) *ListBuilder {
-	b := &ListBuilder{list: &StorageClassList{}}
-	if scl == nil {
-		b.errs = append(b.errs, errors.New("failed to build storageclass list: missing api list"))
-		return b
-	}
-	for _, sc := range scl.Items {
-		sc := sc
-		b.list.items = append(b.list.items, &StorageClass{object: &sc})
-	}
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ListBuilderForObjects returns a instance of ListBuilder from SC instances
 func ListBuilderForObjects(scl *StorageClassList) *ListBuilder {
-	b := &ListBuilder{list: &StorageClassList{}}
-	if scl == nil {
-		b.errs = append(b.errs, errors.New("failed to build storageclass list: missing object list"))
-		return b
-	}
-	b.list = scl
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // List returns the list of StorageClass instances that was built by this builder
-func (b *ListBuilder) List() (*StorageClassList, error) {
-	if len(b.errs) > 0 {
-		return nil, errors.Errorf("failed to list storageclass: %+v", b.errs)
-	}
-	if b.filters == nil || len(b.filters) == 0 {
-		return b.list, nil
-	}
-	filtered := &StorageClassList{}
-	for _, sc := range b.list.items {
-		if b.filters.all(sc) {
-			sc := sc // Pin it
-			filtered.items = append(filtered.items, sc)
-		}
-	}
-	return filtered, nil
-}
+func (b *ListBuilder) List() (*StorageClassList, error) { _ = "STUB: not implemented"; return nil, nil }
+
+// Pin it
 
 // WithFilter add filters on which the StorageClass has to be filtered
 func (b *ListBuilder) WithFilter(pred ...Predicate) *ListBuilder {
-	b.filters = append(b.filters, pred...)
-	return b
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // APIList builds core API PVC list using listbuilder
 func (b *ListBuilder) APIList() (*storagev1.StorageClassList, error) {
-	l, err := b.List()
-	if err != nil {
-		return nil, err
-	}
-	return l.ToAPIList(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Len returns the number of items present
 // in the List of a builder
-func (b *ListBuilder) Len() (int, error) {
-	l, err := b.List()
-	if err != nil {
-		return 0, err
-	}
-	return l.Len(), nil
-}
+func (b *ListBuilder) Len() (int, error) { _ = "STUB: not implemented"; return 0, nil }

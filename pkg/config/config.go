@@ -45,6 +45,4 @@ type Config struct {
 
 // Default returns a new instance of config
 // required to initialize a driver instance
-func Default() *Config {
-	return &Config{}
-}
+func Default() *Config { _ = "STUB: not implemented"; return nil }

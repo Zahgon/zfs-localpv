@@ -17,16 +17,10 @@ limitations under the License.
 package backup
 
 import (
-	"k8s.io/klog/v2"
-
 	clientset "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned"
-	openebsScheme "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned/scheme"
 	informers "github.com/openebs/zfs-localpv/pkg/generated/informer/externalversions"
 	listers "github.com/openebs/zfs-localpv/pkg/generated/lister/zfs/v1"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/kubernetes/scheme"
-	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
@@ -65,72 +59,54 @@ type BkpControllerBuilder struct {
 }
 
 // NewBkpControllerBuilder returns an empty instance of controller builder.
-func NewBkpControllerBuilder() *BkpControllerBuilder {
-	return &BkpControllerBuilder{
-		BkpController: &BkpController{},
-	}
-}
+func NewBkpControllerBuilder() *BkpControllerBuilder { _ = "STUB: not implemented"; return nil }
 
 // withKubeClient fills kube client to controller object.
 func (cb *BkpControllerBuilder) withKubeClient(ks kubernetes.Interface) *BkpControllerBuilder {
-	cb.BkpController.kubeclientset = ks
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withOpenEBSClient fills openebs client to controller object.
 func (cb *BkpControllerBuilder) withOpenEBSClient(cs clientset.Interface) *BkpControllerBuilder {
-	cb.BkpController.clientset = cs
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withBkpLister fills bkp lister to controller object.
 func (cb *BkpControllerBuilder) withBkpLister(sl informers.SharedInformerFactory) *BkpControllerBuilder {
-	bkpInformer := sl.Zfs().V1().ZFSBackups()
-	cb.BkpController.bkpLister = bkpInformer.Lister()
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withBkpSynced adds object sync information in cache to controller object.
 func (cb *BkpControllerBuilder) withBkpSynced(sl informers.SharedInformerFactory) *BkpControllerBuilder {
-	bkpInformer := sl.Zfs().V1().ZFSBackups()
-	cb.BkpController.bkpSynced = bkpInformer.Informer().HasSynced
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withWorkqueue adds workqueue to controller object.
 func (cb *BkpControllerBuilder) withWorkqueueRateLimiting() *BkpControllerBuilder {
-	cb.BkpController.workqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Bkp")
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withRecorder adds recorder to controller object.
 func (cb *BkpControllerBuilder) withRecorder(ks kubernetes.Interface) *BkpControllerBuilder {
-	klog.Infof("Creating event broadcaster")
-	eventBroadcaster := record.NewBroadcaster()
-	eventBroadcaster.StartLogging(klog.Infof)
-	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: ks.CoreV1().Events("")})
-	recorder := eventBroadcaster.NewRecorder(scheme.Scheme, corev1.EventSource{Component: controllerAgentName})
-	cb.BkpController.recorder = recorder
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withEventHandler adds event handlers controller object.
 func (cb *BkpControllerBuilder) withEventHandler(cvcInformerFactory informers.SharedInformerFactory) *BkpControllerBuilder {
-	cvcInformer := cvcInformerFactory.Zfs().V1().ZFSBackups()
-	// Set up an event handler for when Bkp resources change
-	cvcInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
-		AddFunc:    cb.BkpController.addBkp,
-		UpdateFunc: cb.BkpController.updateBkp,
-		DeleteFunc: cb.BkpController.deleteBkp,
-	})
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Set up an event handler for when Bkp resources change
 
 // Build returns a controller instance.
 func (cb *BkpControllerBuilder) Build() (*BkpController, error) {
-	err := openebsScheme.AddToScheme(scheme.Scheme)
-	if err != nil {
-		return nil, err
-	}
-	return cb.BkpController, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

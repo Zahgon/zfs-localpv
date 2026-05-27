@@ -13,28 +13,33 @@ type FakeZfsV1 struct {
 }
 
 func (c *FakeZfsV1) ZFSBackups(namespace string) v1.ZFSBackupInterface {
-	return newFakeZFSBackups(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(v1.ZFSBackupInterface)
 }
 
 func (c *FakeZfsV1) ZFSNodes(namespace string) v1.ZFSNodeInterface {
-	return newFakeZFSNodes(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(v1.ZFSNodeInterface)
 }
 
 func (c *FakeZfsV1) ZFSRestores(namespace string) v1.ZFSRestoreInterface {
-	return newFakeZFSRestores(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(v1.ZFSRestoreInterface)
 }
 
 func (c *FakeZfsV1) ZFSSnapshots(namespace string) v1.ZFSSnapshotInterface {
-	return newFakeZFSSnapshots(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(v1.ZFSSnapshotInterface)
 }
 
 func (c *FakeZfsV1) ZFSVolumes(namespace string) v1.ZFSVolumeInterface {
-	return newFakeZFSVolumes(c, namespace)
+	_ = "STUB: not implemented"
+	return *new(v1.ZFSVolumeInterface)
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeZfsV1) RESTClient() rest.Interface {
-	var ret *rest.RESTClient
-	return ret
+	_ = "STUB: not implemented"
+	return *new(rest.Interface)
 }

@@ -15,18 +15,6 @@ type fakeZFSRestores struct {
 }
 
 func newFakeZFSRestores(fake *FakeZfsV1, namespace string) zfsv1.ZFSRestoreInterface {
-	return &fakeZFSRestores{
-		gentype.NewFakeClientWithList[*v1.ZFSRestore, *v1.ZFSRestoreList](
-			fake.Fake,
-			namespace,
-			v1.SchemeGroupVersion.WithResource("zfsrestores"),
-			v1.SchemeGroupVersion.WithKind("ZFSRestore"),
-			func() *v1.ZFSRestore { return &v1.ZFSRestore{} },
-			func() *v1.ZFSRestoreList { return &v1.ZFSRestoreList{} },
-			func(dst, src *v1.ZFSRestoreList) { dst.ListMeta = src.ListMeta },
-			func(list *v1.ZFSRestoreList) []*v1.ZFSRestore { return gentype.ToPointerSlice(list.Items) },
-			func(list *v1.ZFSRestoreList, items []*v1.ZFSRestore) { list.Items = gentype.FromPointerSlice(items) },
-		),
-		fake,
-	}
+	_ = "STUB: not implemented"
+	return *new(zfsv1.ZFSRestoreInterface)
 }

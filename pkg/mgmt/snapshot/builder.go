@@ -18,17 +18,12 @@ package snapshot
 
 import (
 	clientset "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned"
-	openebsScheme "github.com/openebs/zfs-localpv/pkg/generated/clientset/versioned/scheme"
 	informers "github.com/openebs/zfs-localpv/pkg/generated/informer/externalversions"
 	listers "github.com/openebs/zfs-localpv/pkg/generated/lister/zfs/v1"
-	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/kubernetes/scheme"
-	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
-	"k8s.io/klog/v2"
 )
 
 const controllerAgentName = "zfssnap-controller"
@@ -64,72 +59,54 @@ type SnapControllerBuilder struct {
 }
 
 // NewSnapControllerBuilder returns an empty instance of controller builder.
-func NewSnapControllerBuilder() *SnapControllerBuilder {
-	return &SnapControllerBuilder{
-		SnapController: &SnapController{},
-	}
-}
+func NewSnapControllerBuilder() *SnapControllerBuilder { _ = "STUB: not implemented"; return nil }
 
 // withKubeClient fills kube client to controller object.
 func (cb *SnapControllerBuilder) withKubeClient(ks kubernetes.Interface) *SnapControllerBuilder {
-	cb.SnapController.kubeclientset = ks
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withOpenEBSClient fills openebs client to controller object.
 func (cb *SnapControllerBuilder) withOpenEBSClient(cs clientset.Interface) *SnapControllerBuilder {
-	cb.SnapController.clientset = cs
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withSnapLister fills snap lister to controller object.
 func (cb *SnapControllerBuilder) withSnapLister(sl informers.SharedInformerFactory) *SnapControllerBuilder {
-	snapInformer := sl.Zfs().V1().ZFSSnapshots()
-	cb.SnapController.snapLister = snapInformer.Lister()
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withSnapSynced adds object sync information in cache to controller object.
 func (cb *SnapControllerBuilder) withSnapSynced(sl informers.SharedInformerFactory) *SnapControllerBuilder {
-	snapInformer := sl.Zfs().V1().ZFSSnapshots()
-	cb.SnapController.snapSynced = snapInformer.Informer().HasSynced
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withWorkqueue adds workqueue to controller object.
 func (cb *SnapControllerBuilder) withWorkqueueRateLimiting() *SnapControllerBuilder {
-	cb.SnapController.workqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Snap")
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withRecorder adds recorder to controller object.
 func (cb *SnapControllerBuilder) withRecorder(ks kubernetes.Interface) *SnapControllerBuilder {
-	klog.Infof("Creating event broadcaster")
-	eventBroadcaster := record.NewBroadcaster()
-	eventBroadcaster.StartLogging(klog.Infof)
-	eventBroadcaster.StartRecordingToSink(&typedcorev1.EventSinkImpl{Interface: ks.CoreV1().Events("")})
-	recorder := eventBroadcaster.NewRecorder(scheme.Scheme, corev1.EventSource{Component: controllerAgentName})
-	cb.SnapController.recorder = recorder
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withEventHandler adds event handlers controller object.
 func (cb *SnapControllerBuilder) withEventHandler(cvcInformerFactory informers.SharedInformerFactory) *SnapControllerBuilder {
-	cvcInformer := cvcInformerFactory.Zfs().V1().ZFSSnapshots()
-	// Set up an event handler for when Snap resources change
-	cvcInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
-		AddFunc:    cb.SnapController.addSnap,
-		UpdateFunc: cb.SnapController.updateSnap,
-		DeleteFunc: cb.SnapController.deleteSnap,
-	})
-	return cb
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Set up an event handler for when Snap resources change
 
 // Build returns a controller instance.
 func (cb *SnapControllerBuilder) Build() (*SnapController, error) {
-	err := openebsScheme.AddToScheme(scheme.Scheme)
-	if err != nil {
-		return nil, err
-	}
-	return cb.SnapController, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

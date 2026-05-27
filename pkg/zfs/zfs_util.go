@@ -17,23 +17,9 @@ limitations under the License.
 package zfs
 
 import (
-	"bufio"
 	"os/exec"
-	"path/filepath"
-	"strconv"
 
-	"fmt"
-	"os"
-	"time"
-
-	"strings"
-
-	"github.com/openebs/lib-csi/pkg/btrfs"
-	"github.com/openebs/lib-csi/pkg/xfs"
 	apis "github.com/openebs/zfs-localpv/pkg/apis/openebs.io/zfs/v1"
-	k8serrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/api/resource"
-	"k8s.io/klog/v2"
 )
 
 // zfs related constants
@@ -66,890 +52,219 @@ const (
 // and returns combined stdout+stderr. Use this instead of cmd.CombinedOutput()
 // throughout this package so verbosity can be tuned with --v.
 func runCmd(cmd *exec.Cmd, dataset string) ([]byte, error) {
-	klog.V(4).Infof("zfs: executing %v on %q", cmd.Args, dataset)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		klog.V(5).Infof("zfs: command %v on %q output: %s", cmd.Args, dataset, strings.TrimSpace(string(out)))
-	}
-	return out, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PropertyChanged return whether volume property is changed
 func PropertyChanged(oldVol *apis.ZFSVolume, newVol *apis.ZFSVolume) bool {
-	if oldVol.Spec.VolumeType == VolTypeDataset &&
-		newVol.Spec.VolumeType == VolTypeDataset &&
-		oldVol.Spec.RecordSize != newVol.Spec.RecordSize {
-		return true
-	}
-
-	return oldVol.Spec.Compression != newVol.Spec.Compression ||
-		oldVol.Spec.Dedup != newVol.Spec.Dedup
+	_ = "STUB: not implemented"
+	return false
 }
 
 // GetVolumeType returns the volume type
 // whether it is a zvol or dataset
 func GetVolumeType(fstype string) string {
+	_ = "STUB: not implemented"
 	/*
 	 * if fstype is provided as zfs then a zfs dataset will be created
 	 * otherwise a zvol will be created
-	 */
-	switch fstype {
-	case FSTypeZFS:
-		return VolTypeDataset
-	default:
-		return VolTypeZVol
-	}
+	 */return ""
 }
 
 // buildZvolCreateArgs returns zfs create command for zvol along with attributes as a string array
-func buildZvolCreateArgs(vol *apis.ZFSVolume) []string {
-	var ZFSVolArg []string
-
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	ZFSVolArg = append(ZFSVolArg, ZFSCreateArg)
-
-	if vol.Spec.ThinProvision == "yes" {
-		ZFSVolArg = append(ZFSVolArg, "-s")
-	}
-	if len(vol.Spec.Capacity) != 0 {
-		ZFSVolArg = append(ZFSVolArg, "-V", vol.Spec.Capacity)
-	}
-	if len(vol.Spec.VolBlockSize) != 0 {
-		ZFSVolArg = append(ZFSVolArg, "-b", vol.Spec.VolBlockSize)
-	}
-	if len(vol.Spec.Dedup) != 0 {
-		dedupProperty := "dedup=" + vol.Spec.Dedup
-		ZFSVolArg = append(ZFSVolArg, "-o", dedupProperty)
-	}
-	if len(vol.Spec.Compression) != 0 {
-		compressionProperty := "compression=" + vol.Spec.Compression
-		ZFSVolArg = append(ZFSVolArg, "-o", compressionProperty)
-	}
-	if len(vol.Spec.Encryption) != 0 {
-		encryptionProperty := "encryption=" + vol.Spec.Encryption
-		ZFSVolArg = append(ZFSVolArg, "-o", encryptionProperty)
-	}
-	if len(vol.Spec.KeyLocation) != 0 {
-		keyLocation := "keylocation=" + vol.Spec.KeyLocation
-		ZFSVolArg = append(ZFSVolArg, "-o", keyLocation)
-	}
-	if len(vol.Spec.KeyFormat) != 0 {
-		keyFormat := "keyformat=" + vol.Spec.KeyFormat
-		ZFSVolArg = append(ZFSVolArg, "-o", keyFormat)
-	}
-
-	ZFSVolArg = append(ZFSVolArg, volume)
-
-	return ZFSVolArg
-}
+func buildZvolCreateArgs(vol *apis.ZFSVolume) []string { _ = "STUB: not implemented"; return nil }
 
 // buildCloneCreateArgs returns zfs clone commands for zfs volume/dataset along with attributes as a string array
-func buildCloneCreateArgs(vol *apis.ZFSVolume) []string {
-	var ZFSVolArg []string
+func buildCloneCreateArgs(vol *apis.ZFSVolume) []string { _ = "STUB: not implemented"; return nil }
 
-	volume := vol.Spec.PoolName + "/" + vol.Name
-	snapshot := vol.Spec.PoolName + "/" + vol.Spec.SnapName
-
-	ZFSVolArg = append(ZFSVolArg, ZFSCloneArg)
-
-	if vol.Spec.VolumeType == VolTypeDataset {
-		if len(vol.Spec.Capacity) != 0 {
-			quotaProperty := quotaProperty(vol.Spec.QuotaType) + "=" + vol.Spec.Capacity
-			ZFSVolArg = append(ZFSVolArg, "-o", quotaProperty)
-		}
-		if len(vol.Spec.RecordSize) != 0 {
-			recordsizeProperty := "recordsize=" + vol.Spec.RecordSize
-			ZFSVolArg = append(ZFSVolArg, "-o", recordsizeProperty)
-		}
-		if vol.Spec.ThinProvision == "no" {
-			ZFSVolArg = append(ZFSVolArg, "-o", reservationProperty(vol.Spec.QuotaType, vol.Spec.Capacity))
-		}
-		ZFSVolArg = append(ZFSVolArg, "-o", "mountpoint=legacy")
-	}
-
-	if len(vol.Spec.Dedup) != 0 {
-		dedupProperty := "dedup=" + vol.Spec.Dedup
-		ZFSVolArg = append(ZFSVolArg, "-o", dedupProperty)
-	}
-	if len(vol.Spec.Compression) != 0 {
-		compressionProperty := "compression=" + vol.Spec.Compression
-		ZFSVolArg = append(ZFSVolArg, "-o", compressionProperty)
-	}
-	// Note: Encryption parameters (encryption, keylocation, keyformat) are NOT set when cloning.
-	// ZFS clones automatically inherit encryption settings from the parent snapshot.
-	// The encryption property is read-only on clones and attempting to set it will fail with
-	// "encryption is readonly" error. This is expected ZFS behavior.
-	ZFSVolArg = append(ZFSVolArg, snapshot, volume)
-	return ZFSVolArg
-}
+// Note: Encryption parameters (encryption, keylocation, keyformat) are NOT set when cloning.
+// ZFS clones automatically inherit encryption settings from the parent snapshot.
+// The encryption property is read-only on clones and attempting to set it will fail with
+// "encryption is readonly" error. This is expected ZFS behavior.
 
 // buildZFSSnapCreateArgs returns zfs create command for zfs snapshot
 // zfs snapshot <poolname>/<volname>@<snapname>
-func buildZFSSnapCreateArgs(snap *apis.ZFSSnapshot) []string {
-	var ZFSSnapArg []string
-
-	volname := snap.Labels[ZFSVolKey]
-	snapDataset := snap.Spec.PoolName + "/" + volname + "@" + snap.Name
-
-	ZFSSnapArg = append(ZFSSnapArg, ZFSSnapshotArg, snapDataset)
-
-	return ZFSSnapArg
-}
+func buildZFSSnapCreateArgs(snap *apis.ZFSSnapshot) []string { _ = "STUB: not implemented"; return nil }
 
 // buildZFSSnapDestroyArgs returns zfs destroy command for zfs snapshot
 // zfs destroy <poolname>/<volname>@<snapname>
 func buildZFSSnapDestroyArgs(snap *apis.ZFSSnapshot) []string {
-	var ZFSSnapArg []string
-
-	volname := snap.Labels[ZFSVolKey]
-	snapDataset := snap.Spec.PoolName + "/" + volname + "@" + snap.Name
-
-	ZFSSnapArg = append(ZFSSnapArg, ZFSDestroyArg, snapDataset)
-
-	return ZFSSnapArg
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // buildDatasetCreateArgs returns zfs create command for dataset along with attributes as a string array
-func buildDatasetCreateArgs(vol *apis.ZFSVolume) []string {
-	var ZFSVolArg []string
+func buildDatasetCreateArgs(vol *apis.ZFSVolume) []string { _ = "STUB: not implemented"; return nil }
 
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	ZFSVolArg = append(ZFSVolArg, ZFSCreateArg)
-
-	if len(vol.Spec.Capacity) != 0 {
-		quotaProperty := quotaProperty(vol.Spec.QuotaType) + "=" + vol.Spec.Capacity
-		ZFSVolArg = append(ZFSVolArg, "-o", quotaProperty)
-	}
-	if len(vol.Spec.RecordSize) != 0 {
-		recordsizeProperty := "recordsize=" + vol.Spec.RecordSize
-		ZFSVolArg = append(ZFSVolArg, "-o", recordsizeProperty)
-	}
-	if vol.Spec.ThinProvision == "no" {
-		ZFSVolArg = append(ZFSVolArg, "-o", reservationProperty(vol.Spec.QuotaType, vol.Spec.Capacity))
-	}
-	if len(vol.Spec.Dedup) != 0 {
-		dedupProperty := "dedup=" + vol.Spec.Dedup
-		ZFSVolArg = append(ZFSVolArg, "-o", dedupProperty)
-	}
-	if len(vol.Spec.Compression) != 0 {
-		compressionProperty := "compression=" + vol.Spec.Compression
-		ZFSVolArg = append(ZFSVolArg, "-o", compressionProperty)
-	}
-	if len(vol.Spec.Encryption) != 0 {
-		encryptionProperty := "encryption=" + vol.Spec.Encryption
-		ZFSVolArg = append(ZFSVolArg, "-o", encryptionProperty)
-	}
-	if len(vol.Spec.KeyLocation) != 0 {
-		keyLocation := "keylocation=" + vol.Spec.KeyLocation
-		ZFSVolArg = append(ZFSVolArg, "-o", keyLocation)
-	}
-	if len(vol.Spec.KeyFormat) != 0 {
-		keyFormat := "keyformat=" + vol.Spec.KeyFormat
-		ZFSVolArg = append(ZFSVolArg, "-o", keyFormat)
-	}
-
-	// set the mount path to none, by default zfs mounts it to the default dataset path
-	ZFSVolArg = append(ZFSVolArg, "-o", "mountpoint=legacy", volume)
-
-	return ZFSVolArg
-}
+// set the mount path to none, by default zfs mounts it to the default dataset path
 
 // buildVolumeSetArgs returns volume set command along with attributes as a string array
 // TODO(pawan) need to find a way to identify which property has changed
-func buildVolumeSetArgs(vol *apis.ZFSVolume) []string {
-	var ZFSVolArg []string
-
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	ZFSVolArg = append(ZFSVolArg, ZFSSetArg)
-
-	if vol.Spec.VolumeType == VolTypeDataset &&
-		len(vol.Spec.RecordSize) != 0 {
-		recordsizeProperty := "recordsize=" + vol.Spec.RecordSize
-		ZFSVolArg = append(ZFSVolArg, recordsizeProperty)
-	}
-
-	if len(vol.Spec.Dedup) != 0 {
-		dedupProperty := "dedup=" + vol.Spec.Dedup
-		ZFSVolArg = append(ZFSVolArg, dedupProperty)
-	}
-	if len(vol.Spec.Compression) != 0 {
-		compressionProperty := "compression=" + vol.Spec.Compression
-		ZFSVolArg = append(ZFSVolArg, compressionProperty)
-	}
-
-	ZFSVolArg = append(ZFSVolArg, volume)
-
-	return ZFSVolArg
-}
+func buildVolumeSetArgs(vol *apis.ZFSVolume) []string { _ = "STUB: not implemented"; return nil }
 
 // buildVolumeResizeArgs returns volume set command for resizing the zfs volume
-func buildVolumeResizeArgs(vol *apis.ZFSVolume) []string {
-	var ZFSVolArg []string
-
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	ZFSVolArg = append(ZFSVolArg, ZFSSetArg)
-
-	if vol.Spec.VolumeType == VolTypeDataset {
-		quotaProperty := quotaProperty(vol.Spec.QuotaType) + "=" + vol.Spec.Capacity
-		ZFSVolArg = append(ZFSVolArg, quotaProperty)
-	} else {
-		volsizeProperty := "volsize=" + vol.Spec.Capacity
-		ZFSVolArg = append(ZFSVolArg, volsizeProperty)
-	}
-
-	if vol.Spec.ThinProvision == "no" {
-		ZFSVolArg = append(ZFSVolArg, reservationProperty(vol.Spec.QuotaType, vol.Spec.Capacity))
-	}
-
-	ZFSVolArg = append(ZFSVolArg, volume)
-
-	return ZFSVolArg
-}
+func buildVolumeResizeArgs(vol *apis.ZFSVolume) []string { _ = "STUB: not implemented"; return nil }
 
 // buildVolumeBackupArgs returns volume send command for sending the zfs volume
 func buildVolumeBackupArgs(bkp *apis.ZFSBackup, vol *apis.ZFSVolume) ([]string, error) {
-	var ZFSVolArg []string
-	backupDest := bkp.Spec.BackupDest
-
-	bkpAddr := strings.Split(backupDest, ":")
-	if len(bkpAddr) != 2 {
-		return ZFSVolArg, fmt.Errorf("zfs: invalid backup server address %s", backupDest)
-	}
-
-	curSnap := vol.Spec.PoolName + "/" + vol.Name + "@" + bkp.Spec.SnapName
-
-	remote := " | nc -w 3 " + bkpAddr[0] + " " + bkpAddr[1]
-
-	cmd := ZFSVolCmd + " "
-
-	if len(bkp.Spec.PrevSnapName) > 0 {
-		prevSnap := vol.Spec.PoolName + "/" + vol.Name + "@" + bkp.Spec.PrevSnapName
-		// do incremental send
-		cmd += ZFSSendArg + " -i " + prevSnap + " " + curSnap + " " + remote
-	} else {
-		cmd += ZFSSendArg + " " + curSnap + remote
-	}
-
-	ZFSVolArg = append(ZFSVolArg, "-c", cmd)
-
-	return ZFSVolArg, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// do incremental send
 
 // buildVolumeRestoreArgs returns volume recv command for receiving the zfs volume
 func buildVolumeRestoreArgs(rstr *apis.ZFSRestore) ([]string, error) {
-	var ZFSVolArg []string
-	var ZFSRecvParam string
-	restoreSrc := rstr.Spec.RestoreSrc
-
-	volume := rstr.VolSpec.PoolName + "/" + rstr.Spec.VolumeName
-
-	rstrAddr := strings.Split(restoreSrc, ":")
-	if len(rstrAddr) != 2 {
-		return ZFSVolArg, fmt.Errorf("zfs: invalid restore server address %s", restoreSrc)
-	}
-
-	source := "nc -w 3 " + rstrAddr[0] + " " + rstrAddr[1] + " | "
-
-	if rstr.VolSpec.VolumeType == VolTypeDataset {
-		if len(rstr.VolSpec.Capacity) != 0 {
-			ZFSRecvParam += " -o " + quotaProperty(rstr.VolSpec.QuotaType) + "=" + rstr.VolSpec.Capacity
-		}
-		if len(rstr.VolSpec.RecordSize) != 0 {
-			ZFSRecvParam += " -o recordsize=" + rstr.VolSpec.RecordSize
-		}
-		if rstr.VolSpec.ThinProvision == "no" {
-			ZFSRecvParam += " -o reservation=" + rstr.VolSpec.Capacity
-		}
-		ZFSRecvParam += " -o mountpoint=legacy"
-	}
-
-	if len(rstr.VolSpec.Dedup) != 0 {
-		ZFSRecvParam += " -o dedup=" + rstr.VolSpec.Dedup
-	}
-	if len(rstr.VolSpec.Compression) != 0 {
-		ZFSRecvParam += " -o compression=" + rstr.VolSpec.Compression
-	}
-	if len(rstr.VolSpec.Encryption) != 0 {
-		ZFSRecvParam += " -o encryption=" + rstr.VolSpec.Encryption
-	}
-	if len(rstr.VolSpec.KeyLocation) != 0 {
-		ZFSRecvParam += " -o keylocation=" + rstr.VolSpec.KeyLocation
-	}
-	if len(rstr.VolSpec.KeyFormat) != 0 {
-		ZFSRecvParam += " -o keyformat=" + rstr.VolSpec.KeyFormat
-	}
-
-	cmd := source + ZFSVolCmd + " " + ZFSRecvArg + ZFSRecvParam + " -F " + volume
-
-	ZFSVolArg = append(ZFSVolArg, "-c", cmd)
-
-	return ZFSVolArg, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // buildVolumeDestroyArgs returns volume destroy command along with attributes as a string array
-func buildVolumeDestroyArgs(vol *apis.ZFSVolume) []string {
-	var ZFSVolArg []string
+func buildVolumeDestroyArgs(vol *apis.ZFSVolume) []string { _ = "STUB: not implemented"; return nil }
 
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	ZFSVolArg = append(ZFSVolArg, ZFSDestroyArg, "-r", volume)
-
-	return ZFSVolArg
-}
-
-func getVolume(volume string) error {
-	var ZFSVolArg []string
-
-	ZFSVolArg = append(ZFSVolArg, ZFSListArg, volume)
-
-	cmd := exec.Command(ZFSVolCmd, ZFSVolArg...)
-	out, err := runCmd(cmd, volume)
-	return NewZFSError("zfs list", volume, err, out)
-}
+func getVolume(volume string) error { _ = "STUB: not implemented"; return nil }
 
 // CreateVolume creates the zvol/dataset as per
 // info provided in ZFSVolume object
-func CreateVolume(vol *apis.ZFSVolume) error {
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	if err := getVolume(volume); err != nil {
-		var args []string
-		if vol.Spec.VolumeType == VolTypeDataset {
-			args = buildDatasetCreateArgs(vol)
-		} else {
-			args = buildZvolCreateArgs(vol)
-		}
-		cmd := exec.Command(ZFSVolCmd, args...)
-		out, err := runCmd(cmd, volume)
-
-		if err != nil {
-			zerr := NewZFSError("zfs create", volume, err, out)
-			klog.Errorf("zfs: could not create volume %v cmd %v error: %s", volume, args, zerr)
-			return zerr
-		}
-		klog.Infof("created volume %s", volume)
-	} else {
-		klog.Infof("using existing volume %v", volume)
-	}
-
-	return nil
-}
+func CreateVolume(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
 // CreateClone creates clone for the zvol/dataset as per
 // info provided in ZFSVolume object
-func CreateClone(vol *apis.ZFSVolume) error {
-	volume := vol.Spec.PoolName + "/" + vol.Name
+func CreateClone(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
-	if srcVol, ok := vol.Labels[ZFSSrcVolKey]; ok {
-		// datasource is volume, create the snapshot first
-		snap := &apis.ZFSSnapshot{}
-		snap.Name = vol.Name // use volname as snapname
-		snap.Spec = vol.Spec
-		// add src vol name
-		snap.Labels = map[string]string{ZFSVolKey: srcVol}
+// datasource is volume, create the snapshot first
 
-		klog.Infof("creating snapshot %s@%s for the clone %s", srcVol, snap.Name, volume)
+// use volname as snapname
 
-		err := CreateSnapshot(snap)
-
-		if err != nil {
-			klog.Errorf(
-				"zfs: could not create snapshot for the clone vol %s snap %s err %v", volume, snap.Name, err,
-			)
-			return err
-		}
-	}
-
-	if err := getVolume(volume); err != nil {
-		args := buildCloneCreateArgs(vol)
-		cmd := exec.Command(ZFSVolCmd, args...)
-		out, err := runCmd(cmd, volume)
-
-		if err != nil {
-			zerr := NewZFSError("zfs clone", volume, err, out)
-			klog.Errorf("zfs: could not clone volume %v cmd %v error: %s", volume, args, zerr)
-			return zerr
-		}
-		klog.Infof("created clone %s", volume)
-	} else {
-		klog.Infof("using existing clone volume %v", volume)
-	}
-
-	if vol.Spec.FsType == "xfs" {
-		device := ZFSDevPath + volume
-		return xfs.GenerateUUID(device)
-	}
-	if vol.Spec.FsType == "btrfs" {
-		device := ZFSDevPath + volume
-		return btrfs.GenerateUUID(device)
-	}
-	return nil
-}
+// add src vol name
 
 // SetDatasetMountProp sets mountpoint for the volume
 func SetDatasetMountProp(volume string, mountpath string) error {
-	var ZFSVolArg []string
-
-	mountProperty := "mountpoint=" + mountpath
-	ZFSVolArg = append(ZFSVolArg, ZFSSetArg, mountProperty, volume)
-
-	cmd := exec.Command(ZFSVolCmd, ZFSVolArg...)
-	out, err := runCmd(cmd, volume)
-	if err != nil {
-		zerr := NewZFSError("zfs set mountpoint", volume, err, out)
-		klog.Errorf("zfs: could not set mountpoint on dataset %v cmd %v error: %s",
-			volume, ZFSVolArg, zerr)
-		return zerr
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // MountZFSDataset mounts the dataset to the given mountpoint
 func MountZFSDataset(vol *apis.ZFSVolume, mountpath string) error {
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	// set the mountpoint to the path where this volume should be mounted
-	err := SetDatasetMountProp(volume, mountpath)
-	if err != nil {
-		return err
-	}
-
-	/*
-	 * see if we should attempt to mount the dataset.
-	 * Setting the mountpoint is sufficient to mount the zfs dataset,
-	 * but if dataset has been unmounted, then setting the mountpoint
-	 * is not sufficient, we have to mount the dataset explicitly
-	 */
-	mounted, err := GetVolumeProperty(vol, "mounted")
-	if err != nil {
-		return err
-	}
-
-	if mounted == "no" {
-		var MountVolArg []string
-		MountVolArg = append(MountVolArg, "mount", volume)
-		cmd := exec.Command(ZFSVolCmd, MountVolArg...)
-		out, err := runCmd(cmd, volume)
-		if err != nil {
-			zerr := NewZFSError("zfs mount", volume, err, out)
-			klog.Errorf("zfs: could not mount the dataset %v cmd %v error: %s",
-				volume, MountVolArg, zerr)
-			return zerr
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// set the mountpoint to the path where this volume should be mounted
+
+/*
+ * see if we should attempt to mount the dataset.
+ * Setting the mountpoint is sufficient to mount the zfs dataset,
+ * but if dataset has been unmounted, then setting the mountpoint
+ * is not sufficient, we have to mount the dataset explicitly
+ */
+
 // SetDatasetLegacyMount sets the dataset mountpoint to legacy if not set
-func SetDatasetLegacyMount(vol *apis.ZFSVolume) error {
-	if vol.Spec.VolumeType != VolTypeDataset {
-		return nil
-	}
+func SetDatasetLegacyMount(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
-	prop, err := GetVolumeProperty(vol, "mountpoint")
-	if err != nil {
-		return err
-	}
-
-	if prop != "legacy" {
-		// set the mountpoint to legacy
-		volume := vol.Spec.PoolName + "/" + vol.Name
-		err = SetDatasetMountProp(volume, "legacy")
-	}
-
-	return err
-}
+// set the mountpoint to legacy
 
 // GetVolumeProperty gets zfs properties for the volume
 func GetVolumeProperty(vol *apis.ZFSVolume, prop string) (string, error) {
-	var ZFSVolArg []string
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	ZFSVolArg = append(ZFSVolArg, ZFSGetArg, "-pH", "-o", "value", prop, volume)
-
-	cmd := exec.Command(ZFSVolCmd, ZFSVolArg...)
-	out, err := runCmd(cmd, volume)
-	if err != nil {
-		zerr := NewZFSError(fmt.Sprintf("zfs get %s", prop), volume, err, out)
-		klog.Errorf("zfs: could not get %s on dataset %v cmd %v error: %s",
-			prop, volume, ZFSVolArg, zerr)
-		return "", zerr
-	}
-	val := out[:len(out)-1]
-	return string(val), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // SetVolumeProp sets the volume property
-func SetVolumeProp(vol *apis.ZFSVolume) error {
-	var err error
-	volume := vol.Spec.PoolName + "/" + vol.Name
+func SetVolumeProp(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
-	if len(vol.Spec.Compression) == 0 &&
-		len(vol.Spec.Dedup) == 0 &&
-		(vol.Spec.VolumeType != VolTypeDataset ||
-			len(vol.Spec.RecordSize) == 0) {
-		//nothing to set, just return
-		return nil
-	}
-	/* Case: Restart =>
-	 * In this case we get the add event but here we don't know which
-	 * property has changed when we were down, so firing the zfs set
-	 * command with the all property present on the ZFSVolume.
+//nothing to set, just return
 
-	 * Case: Property Change =>
-	 * TODO(pawan) When we get the update event, we make sure at least
-	 * one property has changed before adding it to the event queue for
-	 * handling. At this stage, since we haven't stored the
-	 * ZFSVolume object as it will be too heavy, we are firing the set
-	 * command with the all property preset in the ZFSVolume object since
-	 * it is guaranteed that at least one property has changed.
-	 */
+/* Case: Restart =>
+ * In this case we get the add event but here we don't know which
+ * property has changed when we were down, so firing the zfs set
+ * command with the all property present on the ZFSVolume.
 
-	args := buildVolumeSetArgs(vol)
-	cmd := exec.Command(ZFSVolCmd, args...)
-	out, err := runCmd(cmd, volume)
-
-	if err != nil {
-		zerr := NewZFSError("zfs set", volume, err, out)
-		klog.Errorf("zfs: could not set property on volume %v cmd %v error: %s", volume, args, zerr)
-		return zerr
-	}
-	klog.Infof("property set on volume %s", volume)
-
-	return nil
-}
+ * Case: Property Change =>
+ * TODO(pawan) When we get the update event, we make sure at least
+ * one property has changed before adding it to the event queue for
+ * handling. At this stage, since we haven't stored the
+ * ZFSVolume object as it will be too heavy, we are firing the set
+ * command with the all property preset in the ZFSVolume object since
+ * it is guaranteed that at least one property has changed.
+ */
 
 // DestroyVolume deletes the zfs volume
-func DestroyVolume(vol *apis.ZFSVolume) error {
-	volume := vol.Spec.PoolName + "/" + vol.Name
-	parentDataset := vol.Spec.PoolName
+func DestroyVolume(vol *apis.ZFSVolume) error { _ = "STUB: not implemented"; return nil }
 
-	// check if parent dataset is present or not before attempting to delete the volume
-	if err := getVolume(parentDataset); err != nil {
-		klog.Errorf(
-			"destroy: parent dataset %v is not present, error: %s", parentDataset, err.Error(),
-		)
-		return err
-	}
+// check if parent dataset is present or not before attempting to delete the volume
 
-	if err := getVolume(volume); err != nil {
-		klog.Errorf(
-			"destroy: volume %v is not present, error: %s", volume, err.Error(),
-		)
-		return nil
-	}
+// datasource is volume, delete the dependent snapshot
 
-	args := buildVolumeDestroyArgs(vol)
-	cmd := exec.Command(ZFSVolCmd, args...)
-	out, err := runCmd(cmd, volume)
+// snapname is same as volname
 
-	if err != nil {
-		zerr := NewZFSError("zfs destroy", volume, err, out)
-		klog.Errorf("zfs: could not destroy volume %v cmd %v error: %s", volume, args, zerr)
-		return zerr
-	}
+// add src vol name
 
-	if srcVol, ok := vol.Labels[ZFSSrcVolKey]; ok {
-		// datasource is volume, delete the dependent snapshot
-		snap := &apis.ZFSSnapshot{}
-		snap.Name = vol.Name // snapname is same as volname
-		snap.Spec = vol.Spec
-		// add src vol name
-		snap.Labels = map[string]string{ZFSVolKey: srcVol}
-
-		klog.Infof("destroying snapshot %s@%s for the clone %s", srcVol, snap.Name, volume)
-
-		err := DestroySnapshot(snap)
-
-		if err != nil {
-			// no need to reconcile as volume has already been deleted
-			klog.Errorf(
-				"zfs: could not destroy snapshot for the clone vol %s snap %s err %v", volume, snap.Name, err,
-			)
-		}
-	}
-
-	klog.Infof("destroyed volume %s", volume)
-
-	return nil
-}
+// no need to reconcile as volume has already been deleted
 
 // CreateSnapshot creates the zfs volume snapshot
-func CreateSnapshot(snap *apis.ZFSSnapshot) error {
+func CreateSnapshot(snap *apis.ZFSSnapshot) error { _ = "STUB: not implemented"; return nil }
 
-	volume := snap.Labels[ZFSVolKey]
-	snapDataset := snap.Spec.PoolName + "/" + volume + "@" + snap.Name
-
-	if err := getVolume(snapDataset); err == nil {
-		klog.Infof("snapshot already there %s", snapDataset)
-		// snapshot already there just return
-		return nil
-	}
-
-	args := buildZFSSnapCreateArgs(snap)
-	cmd := exec.Command(ZFSVolCmd, args...)
-	out, err := runCmd(cmd, snapDataset)
-
-	if err != nil {
-		zerr := NewZFSError("zfs snapshot", snapDataset, err, out)
-		klog.Errorf("zfs: could not create snapshot %v@%v cmd %v error: %s", volume, snap.Name, args, zerr)
-		return zerr
-	}
-	klog.Infof("created snapshot %s@%s", volume, snap.Name)
-	return nil
-}
+// snapshot already there just return
 
 // DestroySnapshot deletes the zfs volume snapshot
-func DestroySnapshot(snap *apis.ZFSSnapshot) error {
+func DestroySnapshot(snap *apis.ZFSSnapshot) error { _ = "STUB: not implemented"; return nil }
 
-	volume := snap.Labels[ZFSVolKey]
-	snapDataset := snap.Spec.PoolName + "/" + volume + "@" + snap.Name
-
-	parentDataset := snap.Spec.PoolName
-
-	// check if parent dataset is present or not before attempting to delete the snapshot
-	if err := getVolume(parentDataset); err != nil {
-		klog.Errorf(
-			"destroy: snapshot's(%v) parent dataset %v is not present, error: %s",
-			snapDataset, parentDataset, err.Error(),
-		)
-		return err
-	}
-
-	if err := getVolume(snapDataset); err != nil {
-		klog.Errorf(
-			"destroy: snapshot %v is not present, error: %s", volume, err.Error(),
-		)
-		return nil
-	}
-
-	args := buildZFSSnapDestroyArgs(snap)
-	cmd := exec.Command(ZFSVolCmd, args...)
-	out, err := runCmd(cmd, snapDataset)
-
-	if err != nil {
-		zerr := NewZFSError("zfs destroy snapshot", snapDataset, err, out)
-		klog.Errorf("zfs: could not destroy snapshot %v@%v cmd %v error: %s", volume, snap.Name, args, zerr)
-		return zerr
-	}
-	klog.Infof("deleted snapshot %s@%s", volume, snap.Name)
-	return nil
-}
+// check if parent dataset is present or not before attempting to delete the snapshot
 
 // GetVolumeDevPath returns devpath for the given volume
 func GetVolumeDevPath(vol *apis.ZFSVolume) (string, error) {
-	volume := vol.Spec.PoolName + "/" + vol.Name
-	if vol.Spec.VolumeType == VolTypeDataset {
-		return volume, nil
-	}
-
-	devicePath := ZFSDevPath + volume
-
-	// evaluate the symlink to get the dev path for zvol
-	dev, err := filepath.EvalSymlinks(devicePath)
-	if err != nil {
-		return "", err
-	}
-
-	return dev, nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
+
+// evaluate the symlink to get the dev path for zvol
 
 // ResizeZFSVolume resize volume
 func ResizeZFSVolume(vol *apis.ZFSVolume, mountpath string, resizefs bool) error {
-	oldReservation, err := GetVolumeProperty(vol, reservationPropertyName(vol.Spec.QuotaType))
-	if err != nil {
-		return err
-	}
-
-	volume := vol.Spec.PoolName + "/" + vol.Name
-	args := buildVolumeResizeArgs(vol)
-	cmd := exec.Command(ZFSVolCmd, args...)
-
-	out, err := runCmd(cmd, volume)
-	if err != nil {
-		zerr := NewZFSError("zfs set quota", volume, err, out)
-		klog.Errorf("zfs: could not resize the volume %v cmd %v error: %s", volume, args, zerr)
-		klog.Infof("zfs: reverting the volume quota to %s", oldReservation)
-
-		revertedVol := vol.DeepCopy()
-		revertedVol.Spec.Capacity = oldReservation
-		args := buildVolumeResizeArgs(revertedVol)
-		cmd := exec.Command(ZFSVolCmd, args...)
-		if out, rerr := runCmd(cmd, volume); rerr != nil {
-			rzerr := NewZFSError("zfs set quota (revert)", volume, rerr, out)
-			klog.Errorf("zfs: could not revert the volume %v quota cmd %v error: %s", volume, args, rzerr)
-		}
-
-		return zerr
-	}
-
-	if resizefs {
-		// resize the filesystem so that applications can use the expanded space
-		err = handleVolResize(vol, mountpath)
-	}
-
-	return err
-}
-
-// CreateBackup creates the backup
-func CreateBackup(bkp *apis.ZFSBackup) error {
-	vol, err := GetZFSVolume(bkp.Spec.VolumeName)
-	if err != nil {
-		return err
-	}
-
-	volume := vol.Spec.PoolName + "/" + vol.Name
-
-	/* create the snapshot for the backup */
-	snap := &apis.ZFSSnapshot{}
-	snap.Name = bkp.Spec.SnapName
-	snap.Spec.PoolName = vol.Spec.PoolName
-	snap.Labels = map[string]string{ZFSVolKey: vol.Name}
-
-	err = CreateSnapshot(snap)
-
-	if err != nil {
-		klog.Errorf(
-			"zfs: could not create snapshot for the backup vol %s snap %s err %v", volume, snap.Name, err,
-		)
-		return err
-	}
-
-	args, err := buildVolumeBackupArgs(bkp, vol)
-	if err != nil {
-		return err
-	}
-	cmd := exec.Command("bash", args...)
-	out, err := runCmd(cmd, volume)
-
-	if err != nil {
-		zerr := NewZFSError("zfs send (backup)", volume, err, out)
-		klog.Errorf("zfs: could not backup the volume %v cmd %v error: %s", volume, args, zerr)
-		return zerr
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// resize the filesystem so that applications can use the expanded space
+
+// CreateBackup creates the backup
+func CreateBackup(bkp *apis.ZFSBackup) error { _ = "STUB: not implemented"; return nil }
+
+/* create the snapshot for the backup */
+
 // DestoryBackup deletes the snapshot created
-func DestoryBackup(bkp *apis.ZFSBackup) error {
-	vol, err := GetZFSVolume(bkp.Spec.VolumeName)
-	if err != nil {
-		if k8serrors.IsNotFound(err) {
-			// Volume has been deleted, return
-			return nil
-		}
-		return err
-	}
+func DestoryBackup(bkp *apis.ZFSBackup) error { _ = "STUB: not implemented"; return nil }
 
-	volume := vol.Spec.PoolName + "/" + vol.Name
+// Volume has been deleted, return
 
-	/* create the snapshot for the backup */
-	snap := &apis.ZFSSnapshot{}
-	snap.Name = bkp.Spec.SnapName
-	snap.Spec.PoolName = vol.Spec.PoolName
-	snap.Labels = map[string]string{ZFSVolKey: vol.Name}
-
-	err = DestroySnapshot(snap)
-
-	if err != nil {
-		klog.Errorf(
-			"zfs: could not destroy snapshot for the backup vol %s snap %s err %v", volume, snap.Name, err,
-		)
-	}
-	return err
-}
+/* create the snapshot for the backup */
 
 // getDevice waits for the device to be created and returns the devpath
 func getDevice(volume string) (string, error) {
-	device := ZFSDevPath + volume
-	// device should be created within 5 seconds
-	timeout := time.After(5 * time.Second)
-	for {
-		select {
-		case <-timeout:
-			return "", fmt.Errorf("zfs: not able to get the device: %s", device)
-		default:
-			if _, err := os.Stat(device); err == nil {
-				return device, nil
-			}
-		}
-		time.Sleep(1 * time.Second)
-	}
+	_ = "STUB: not implemented"
+	return "",
+
+		// device should be created within 5 seconds
+		nil
 }
 
 // CreateRestore creates the restore
-func CreateRestore(rstr *apis.ZFSRestore) error {
-	if len(rstr.VolSpec.PoolName) == 0 {
-		// for backward compatibility, older version of
-		// velero will not add spec in the ZFSRestore Object
-		// query it here and fill that information
-		vol, err := GetZFSVolume(rstr.Spec.VolumeName)
-		if err != nil {
-			return err
-		}
-		rstr.VolSpec = vol.Spec
-	}
-	args, err := buildVolumeRestoreArgs(rstr)
-	if err != nil {
-		return err
-	}
+func CreateRestore(rstr *apis.ZFSRestore) error { _ = "STUB: not implemented"; return nil }
 
-	volume := rstr.VolSpec.PoolName + "/" + rstr.Spec.VolumeName
+// for backward compatibility, older version of
+// velero will not add spec in the ZFSRestore Object
+// query it here and fill that information
 
-	cmd := exec.Command("bash", args...)
-	out, err := runCmd(cmd, volume)
-
-	if err != nil {
-		zerr := NewZFSError("zfs recv (restore)", volume, err, out)
-		klog.Errorf("zfs: could not restore the volume %v cmd %v error: %s", volume, args, zerr)
-		return zerr
-	}
-
-	/*
-	 * need to generate a new uuid for zfs and btrfs volumes
-	 * so that we can mount it.
-	 */
-	if rstr.VolSpec.FsType == "xfs" {
-		device, err := getDevice(volume)
-		if err != nil {
-			return err
-		}
-		return xfs.GenerateUUID(device)
-	}
-	if rstr.VolSpec.FsType == "btrfs" {
-		device, err := getDevice(volume)
-		if err != nil {
-			return err
-		}
-		return btrfs.GenerateUUID(device)
-	}
-
-	return nil
-}
+/*
+ * need to generate a new uuid for zfs and btrfs volumes
+ * so that we can mount it.
+ */
 
 // ListZFSPool invokes `zfs list` to list all the available
 // pools in the node.
-func ListZFSPool() ([]apis.Pool, error) {
-	args := []string{
-		ZFSListArg, "-d", "1", "-s", "name",
-		"-o", "name,guid,available,used",
-		"-H", "-p",
-	}
-	cmd := exec.Command(ZFSVolCmd, args...)
-	output, err := runCmd(cmd, "")
-	if err != nil {
-		zerr := NewZFSError("zfs list (pools)", "", err, output)
-		klog.Errorf("zfs: could not list zpool cmd %v: %s", args, zerr)
-		return nil, zerr
-	}
-	return decodeListOutput(output)
-}
+func ListZFSPool() ([]apis.Pool, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // The `zfs list` command will list down all the resources including
 // pools and volumes and as the pool names cannot have "/" in the name
@@ -957,59 +272,15 @@ func ListZFSPool() ([]apis.Pool, error) {
 // $ zfs list -s name -o name,guid,available -H -p
 // zfspv-pool	4734063099997348493	103498467328
 // zfspv-pool/pvc-be02d230-3738-4de9-8968-70f5d10d86dd	3380225606535803752	4294942720
-func decodeListOutput(raw []byte) ([]apis.Pool, error) {
-	scanner := bufio.NewScanner(strings.NewReader(string(raw)))
-	pools := []apis.Pool{}
-	for scanner.Scan() {
-		items := strings.Split(strings.TrimSpace(scanner.Text()), "\t")
-		if !strings.Contains(items[0], "/") {
-			var pool apis.Pool
-			pool.Name = items[0]
-			pool.UUID = items[1]
-			sizeBytes, err := strconv.ParseInt(items[2],
-				10, 64)
-			if err != nil {
-				err = fmt.Errorf("cannot get free size for pool %v: %v", pool.Name, err)
-				return pools, err
-			}
-			pool.Free = *resource.NewQuantity(sizeBytes, resource.BinarySI)
-			usedBytes, err := strconv.ParseInt(items[3],
-				10, 64)
-			if err != nil {
-				err = fmt.Errorf("cannot get free size for pool %v: %v", pool.Name, err)
-				return pools, err
-			}
-			pool.Used = *resource.NewQuantity(usedBytes, resource.BinarySI)
-			pools = append(pools, pool)
-		}
-	}
-	return pools, nil
-}
+func decodeListOutput(raw []byte) ([]apis.Pool, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // reservationProperty returns the reservation property based on the quota type.
-func reservationProperty(quotaType, capacity string) string {
-	return reservationPropertyName(quotaType) + "=" + capacity
-}
+func reservationProperty(quotaType, capacity string) string { _ = "STUB: not implemented"; return "" }
 
 // reservationPropertyName returns the reservation property name based on the quota type.
-func reservationPropertyName(quotaType string) string {
-	validQuotaType := quotaProperty(quotaType)
+func reservationPropertyName(quotaType string) string { _ = "STUB: not implemented"; return "" }
 
-	reservationProperties := map[string]string{
-		"quota":    "reservation",
-		"refquota": "refreservation",
-	}
-
-	// Return the mapped property or default to "reservation"
-	return reservationProperties[validQuotaType]
-}
+// Return the mapped property or default to "reservation"
 
 // quotaProperty ensures backwards compatibility for the quota property.
-func quotaProperty(quotaType string) string {
-	switch quotaType {
-	case "refquota":
-		return "refquota"
-	default:
-		return "quota"
-	}
-}
+func quotaProperty(quotaType string) string { _ = "STUB: not implemented"; return "" }
